@@ -1,14 +1,27 @@
 import express from "express";
 import morgan from "morgan";
+import fileUpload from "express-fileupload";
+
 import { PORT_SERVER } from "./config.js";
 import { conectDB } from "./db.js";
 import articleRoutes from "./routes/articleRoutes.js";
 
 const app = express();
+
+//middlewares
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir:'./upload/images'
+  })
+);
+
+//DataBase
 conectDB();
 
-app.use(morgan("dev"));
-
+//Routes
 app.use(articleRoutes);
 
 app.listen(PORT_SERVER, () => {

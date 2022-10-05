@@ -1,13 +1,21 @@
 import mongoose from "mongoose";
 
 // Define a schema
-const Schema = mongoose.Schema;
-
-const ArticleSchema = new Schema({
-  id: Schema.Types.ObjectId,
-  name: String,
+const articleSchema = new mongoose.Schema({
+  ID: { type: String, require: true, trim: true, unique:true },
+  ARTICULO: { type: String, require: true },
+  DESCRIPCION: { type: String, require: true},
+  CANT_BULTO: { type: Number, require: true },
+  CATEGORIA: { type: String },
+  SUB_CATEGORIA: [{ type: String }],
+  IMAGE_URL: [
+    {
+      url: String,
+      id: String,
+    },
+  ],
+  PRECIO: { type: Number, require: true },
+  STOCK: { type: Number },
 });
 
-const article = mongoose.model("article", ArticleSchema);
-
-export { article };
+export default mongoose.model("article", articleSchema);
