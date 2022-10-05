@@ -13,6 +13,8 @@ const agregarArticulo = async (req, res) => {
     STOCK,
   } = req.body;
 
+  console.log(req.files)
+
   try {
     const newArticle = new article({
       ID,
