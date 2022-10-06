@@ -13,8 +13,6 @@ const agregarArticulo = async (req, res) => {
     STOCK,
   } = req.body;
 
-  console.log(req.files)
-
   try {
     const newArticle = new article({
       ID,
@@ -27,7 +25,8 @@ const agregarArticulo = async (req, res) => {
       PRECIO,
       STOCK,
     });
-    await newArticle.save();
+    const result = await newArticle.save();
+    console.log(result)
     res.status(200).send({
       status: true,
       message: "Articulo Agregado",
