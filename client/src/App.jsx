@@ -1,9 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import axios from "axios";
+import "./App.css";
+import { useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  const obtenerArticulos = async () => {
+    const result = await axios.get("https://app-gestion-articulos-mern-production.up.railway.app/article");
+    console.log(result);
+  };
+
+  useEffect(() => {
+    obtenerArticulos();
+  }, []);
 
   return (
     <div className="App">
@@ -28,7 +39,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
