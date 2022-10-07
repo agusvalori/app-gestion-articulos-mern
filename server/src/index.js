@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import fileUpload from "express-fileupload";
-
+import cors from 'cors'
 import { PORT_SERVER } from "./config.js";
 import { conectDB } from "./db.js";
 import articleRoutes from "./routes/articleRoutes.js";
