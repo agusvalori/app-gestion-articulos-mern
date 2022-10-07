@@ -11,7 +11,7 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors({ origin: "http://127.0.0.1:5173" }));
+app.use(cors({ origin: "http://127.0.50.1:5173" }));
 app.use(
   fileUpload({
     useTempFiles: true,
