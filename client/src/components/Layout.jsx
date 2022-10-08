@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import { TabPanelAdmin } from "./tab/TabPanelAdmin";
 import { TabPanelSeller } from "./tab/TabPanelSeller";
-import { ArticuloContextProvider } from "../context/ArticleContext";
+import { useArticle } from "../context/ArticleContext";
 
 export const Layout = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  return (
-    <Box>
-      <ArticuloContextProvider>
-        {isAuthenticated ? <TabPanelAdmin /> : <TabPanelSeller />}
-      </ArticuloContextProvider>
-    </Box>
-  );
+  const { obtenerArticulos } = useArticle();
+  useEffect(() => {
+    obtenerArticulos();
+  }, []);
+
+  return <Box>{isAuthenticated ? <TabPanelAdmin /> : <TabPanelSeller />}</Box>;
 };

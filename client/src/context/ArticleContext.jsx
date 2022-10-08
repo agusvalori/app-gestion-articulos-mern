@@ -21,9 +21,13 @@ const ArticuloContextProvider = (props) => {
     console.log("crearArticulo")
   }
 
-  const obtenerArticulos = ()=>{
-    const result = axios.get("https://app-gestion-articulos-mern-production.up.railway.app/article")
-    console.log(result)
+  const obtenerArticulos = async ()=>{
+    const result = await axios.get("https://app-gestion-articulos-mern-production.up.railway.app/article")
+    if(result?.data?.status){
+      setArticulos(result?.data.value)
+    }else{
+      console.log("No se puede obtener los articulos")
+    }
   }
 
   const editarArticulo = (articulo)=>{
