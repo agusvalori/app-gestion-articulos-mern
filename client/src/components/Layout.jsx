@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useState } from "react";
+import { Box } from "@mui/system";
+import { TabPanelAdmin } from "./tab/TabPanelAdmin";
+import { TabPanelSeller } from "./tab/TabPanelSeller";
+import { ArticuloContextProvider } from "../context/ArticleContext";
 
 export const Layout = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
-    <div>Layout</div>
-  )
-}
+    <Box>
+      <ArticuloContextProvider>
+        {isAuthenticated ? <TabPanelAdmin /> : <TabPanelSeller />}
+      </ArticuloContextProvider>
+    </Box>
+  );
+};
