@@ -9,13 +9,13 @@ import articleRoutes from "./routes/articleRoutes.js";
 const app = express();
 
 //middlewares
-app.use(express.json());
-app.use(morgan("dev"));
 app.use(cors({ origin: "http://127.0.0.1:5173" }));
+app.use(morgan("dev"));
+app.use(express.json());
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "./upload/images",
+    tempFileDir: "./upload/images",    
   })
 );
 
