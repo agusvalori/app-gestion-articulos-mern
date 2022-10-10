@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 
 const ArticuloContext = createContext();
 
@@ -13,36 +13,64 @@ const useArticle = () => {
   return context;
 };
 
-
 const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
-  const crearArticulo = (articulo)=>{
-    console.log("crearArticulo")
-  }
+  const crearArticulo = (articulo) => {
+    console.log("crearArticulo");
+  };
 
-  const obtenerArticulos = async ()=>{
-    const result = await axios.get("https://app-gestion-articulos-mern-production.up.railway.app/article")
-    if(result?.data?.status){
-      setArticulos(result?.data.value)
-    }else{
-      console.log("No se puede obtener los articulos")
+  const obtenerArticulos = async () => {
+    try {
+      const result = await axios.get(
+        "https://app-gestion-articulos-mern-production.up.railway.app/article"
+      );
+      if (result?.data?.status) {
+        setArticulos(result?.data.value);
+      } else {
+        console.log("No se puede obtener los articulos");
+      }
+    } catch (error) {
+      console.log(
+        "Error al obtener los articulos desde el servidor: ",
+        error.message
+      );
     }
-  }
+  };
 
-  const editarArticulo = (articulo)=>{
-    console.log("editarArticulo")
-  }
+  const editarArticulo = (articulo) => {
+    console.log("editarArticulo");
+  };
 
-  const eliminarArticulo = (id)=>{
-    console.log("eliminarArticulo")
-  }
+  const eliminarArticulo = async (id) => {
+    console.log(id)
+    try {
+      const result = await axios.delete(
+        "https://app-gestion-articulos-mern-production.up.railway.app/article/" +
+          id
+      );
+      console.log("eliminarArticulo: ",result);
+      await obtenerArticulos();
+    } catch (error) {
+      console.log(
+        "Error al eliminar los articulos desde el servidor: ",
+        error.message
+      );
+    }
+  };
   return (
-    <ArticuloContext.Provider value={{articulos,crearArticulo,editarArticulo,obtenerArticulos,eliminarArticulo}}>
+    <ArticuloContext.Provider
+      value={{
+        articulos,
+        crearArticulo,
+        editarArticulo,
+        obtenerArticulos,
+        eliminarArticulo,
+      }}
+    >
       {props.children}
     </ArticuloContext.Provider>
   );
 };
 
-
-export {ArticuloContext, ArticuloContextProvider, useArticle}
+export { ArticuloContext, ArticuloContextProvider, useArticle };

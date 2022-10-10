@@ -7,7 +7,7 @@ const articleSchema = new mongoose.Schema({
   DESCRIPCION: { type: String, require: true },
   CANT_BULTO: { type: Number, require: true },
   CATEGORIA: { type: String },
-  SUB_CATEGORIA: [{ type: String }],
+  SUB_CATEGORIA: { type: String },
   IMAGE_URL: [
     {
       article_id: String,
