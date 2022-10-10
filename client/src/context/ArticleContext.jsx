@@ -43,14 +43,13 @@ const ArticuloContextProvider = (props) => {
   };
 
   const eliminarArticulo = async (id) => {
-    console.log(id)
     try {
       const result = await axios.delete(
         "https://app-gestion-articulos-mern-production.up.railway.app/article/" +
           id
       );
-      console.log("eliminarArticulo: ",result);
       await obtenerArticulos();
+      return result.data;
     } catch (error) {
       console.log(
         "Error al eliminar los articulos desde el servidor: ",

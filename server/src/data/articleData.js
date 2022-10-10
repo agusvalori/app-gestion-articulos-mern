@@ -128,10 +128,8 @@ const editarArticulo = async (req, res) => {
 
 const eliminarArticulo = async (req, res) => {
   try {
-    const { id } = req.params;
-    console.log(id)
-    const result = await article.findOneAndDelete({ ID: id });
-    console.log(result)
+    const { id } = req.params;    
+    const result = await article.findOneAndDelete({ ID: id });    
     if (result) {
       res
         .status(200)

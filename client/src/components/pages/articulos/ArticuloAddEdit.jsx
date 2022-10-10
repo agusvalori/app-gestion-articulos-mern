@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {
   Button,
+  FormControl,
+  FormLabel,
   IconButton,
   Modal,
   Paper,
@@ -10,6 +12,7 @@ import {
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import { ArticuloAddEditImage } from "./ArticuloAddEditImage";
 
 export const ArticuloAddEdit = ({ articulo }) => {
   const [open, setOpen] = useState(false);
@@ -88,7 +91,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                   label="SUBCATEGORIA"
                   onChange={(event) => handleChange(event)}
                   value={values?.SUB_CATEGORIA}
-                  helperText={"subcategoria1, subcategoria2, subcategoria..."}                  
+                  helperText={"subcategoria1, subcategoria2, subcategoria..."}
                 />
 
                 <TextField
@@ -105,6 +108,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                   value={values?.STOCK}
                   onChange={(event) => handleChange(event)}
                 />
+                <ArticuloAddEditImage values={values} />
               </Box>
 
               <Box
