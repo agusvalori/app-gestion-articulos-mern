@@ -28,7 +28,8 @@ const agregarArticulo = async (req, res) => {
     });
 
     //agregamos la imagen
-    const { image } = req.files;
+    //const { image } = req.files;
+    const { image } = req.body.IMAGE_URL
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
