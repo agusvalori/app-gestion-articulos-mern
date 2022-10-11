@@ -1,20 +1,16 @@
-import React from "react";
-import { Fab, IconButton, Input, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { IconButton, Input, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { useEffect } from "react";
-import { useState } from "react";
 
-export const ArticuloAddEditImage = ({ values }) => {
-  const [imagenes, setImagenes] = useState(values?.IMAGE_URL);
+export const ArticuloAddEditImage = ({ values, setValues }) => {
   const [helperText, setHelperText] = useState("");
 
   const handleChange = (event, index) => {
-    console.log("handleChange: ", index);
     const { files } = event.target;
     if (files.length === 1 && /.(jpeg|jpg|png)$/i.test(files[0].name)) {
-      setImagenes([...imagenes, files[0]]);
+      setValues({ ...values, IMAGE_URL: [...values.IMAGE_URL, files[0]] });
       setHelperText("");
     } else {
       setHelperText(
@@ -23,26 +19,32 @@ export const ArticuloAddEditImage = ({ values }) => {
     }
   };
 
+  const handleImageDelete = (image) => {
+    setValues({
+      ...values,
+      IMAGE_URL: values.IMAGE_URL.filter((img) => img != image),
+    });
+  };
+
   const RenderImage = ({ image }) => {
     if (image?.secure_url) {
       return (
-        
-          <Box
-            key={image?.public_id}
-            sx={{
-              width: "80px",
-              height: "80px",
-              display: "flex",
-              justifyContent: "center",
-              border: "solid 1px blue",
-            }}
-          >
-            <img width="75px" height="75px" src={image.secure_url} />
-            <Fab size="small" aria-label="remove">
+        <Box
+          key={image?.public_id}
+          sx={{
+            width: "80px",
+            height: "80px",
+            backgroundImage: `url(${image.secure_url})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
+            <IconButton onClick={() => handleImageDelete(image)} size="small">
               <RemoveCircleIcon fontSize="small" color="error" />
-            </Fab>
+            </IconButton>
           </Box>
-        
+        </Box>
       );
     } else {
       return (
@@ -51,13 +53,13 @@ export const ArticuloAddEditImage = ({ values }) => {
           sx={{
             width: "80px",
             height: "80px",
-            display: "flex",
-            justifyContent: "center",
+            backgroundImage: `url(${URL.createObjectURL(image)})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          <img width="75px" height="75px" src={URL.createObjectURL(image)} />
-          <Box sx={{ position: "relative", top: "-20%", left: "-10px" }}>
-            <IconButton size="small">
+          <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
+            <IconButton onClick={() => handleImageDelete(image)} size="small">
               <RemoveCircleIcon fontSize="small" color="error" />
             </IconButton>
           </Box>
@@ -94,14 +96,12 @@ export const ArticuloAddEditImage = ({ values }) => {
   };
 
   const RenderItems = ({ index }) => {
-    return Array.isArray(imagenes) && imagenes[index] ? (
-      <RenderImage image={imagenes[index]} />
+    return Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index] ? (
+      <RenderImage image={values.IMAGE_URL[index]} />
     ) : (
       <RenderAddImage index={index} />
     );
   };
-
-  useEffect(() => {}, [imagenes]);
 
   return (
     <Box>
@@ -111,7 +111,6 @@ export const ArticuloAddEditImage = ({ values }) => {
             display: "grid",
             columnGap: "5px",
             gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            border: "1px solid black",
           }}
         >
           <RenderItems index={0} />

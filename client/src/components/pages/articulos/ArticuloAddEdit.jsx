@@ -108,7 +108,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                   value={values?.STOCK}
                   onChange={(event) => handleChange(event)}
                 />
-                <ArticuloAddEditImage values={values} />
+                <ArticuloAddEditImage setValues={setValues} values={values} />
               </Box>
 
               <Box
