@@ -3,7 +3,7 @@ import { uploadImageCloudinary } from "../lib/cloudinary.js";
 import fs from "fs-extra";
 
 const agregarArticulo = async (req, res) => {
-  console.log("Agregar Articulo, ", req.body);
+  console.log("Agregar Articulo, ", req.body.IMAGE_URL);
   const {
     ID,
     ARTICULO,
