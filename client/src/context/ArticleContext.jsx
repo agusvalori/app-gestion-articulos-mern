@@ -17,17 +17,15 @@ const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
   const crearArticulo = async (articulo) => {
+    console.log("crearArticulo: ", articulo);
     try {
       const result = await axios.post(
         "https://app-gestion-articulos-mern-production.up.railway.app/article",
-        articulo
+        [articulo]
       );
       console.log(result);
     } catch (error) {
-      console.log(
-        "Error al agregar los articulos desde el servidor: ",
-        error
-      );
+      console.log("Error al agregar los articulos desde el servidor: ", error);
     }
   };
 
