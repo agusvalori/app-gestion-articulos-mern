@@ -2,7 +2,7 @@ import article from "../entity/articleEntity.js";
 import { uploadImageCloudinary } from "../lib/cloudinary.js";
 import fs from "fs-extra";
 
-const agregarArticulo = async (req, res) => {  
+const agregarArticulo = async (req, res) => {
   const {
     ID,
     ARTICULO,
@@ -28,9 +28,10 @@ const agregarArticulo = async (req, res) => {
 
     //agregamos la imagen
     //const { image } = req.files;
-    console.log("Files: ",req.files)
-    const { image } = req.body.IMAGE_URL
-    console.log("ImageL ",image)
+    console.log("Files: ", req.files);
+    const { image } = false;
+    console.log("ImageL ", req.body.IMAGE_URL);
+    /*
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -48,6 +49,7 @@ const agregarArticulo = async (req, res) => {
     }
 
     await newArticle.save();
+    */
 
     res.status(200).send({
       status: true,
