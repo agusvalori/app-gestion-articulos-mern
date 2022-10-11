@@ -3,6 +3,7 @@ import { uploadImageCloudinary } from "../lib/cloudinary.js";
 import fs from "fs-extra";
 
 const agregarArticulo = async (req, res) => {
+  console.log("Agregar Articulo, ", req.body);
   const {
     ID,
     ARTICULO,
@@ -29,17 +30,17 @@ const agregarArticulo = async (req, res) => {
     //agregamos la imagen
     const { image } = req.files;
     if (image) {
-      if (Array.isArray(image)) {        
-        for (let index = 0; index < image.length; index++) {          
+      if (Array.isArray(image)) {
+        for (let index = 0; index < image.length; index++) {
           const result = await uploadImageCloudinary(
             image[index]?.tempFilePath
           );
-          newArticle.IMAGE_URL.push({...result,article_id:ID});          
+          newArticle.IMAGE_URL.push({ ...result, article_id: ID });
           await fs.unlink(image[index]?.tempFilePath);
         }
       } else {
         const result = await uploadImageCloudinary(image?.tempFilePath);
-        newArticle.IMAGE_URL.push({...result,article_id:ID});          
+        newArticle.IMAGE_URL.push({ ...result, article_id: ID });
         await fs.unlink(image.tempFilePath);
       }
     }
@@ -128,8 +129,8 @@ const editarArticulo = async (req, res) => {
 
 const eliminarArticulo = async (req, res) => {
   try {
-    const { id } = req.params;    
-    const result = await article.findOneAndDelete({ ID: id });    
+    const { id } = req.params;
+    const result = await article.findOneAndDelete({ ID: id });
     if (result) {
       res
         .status(200)

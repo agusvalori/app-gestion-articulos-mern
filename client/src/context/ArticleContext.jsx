@@ -16,8 +16,19 @@ const useArticle = () => {
 const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
-  const crearArticulo = (articulo) => {
-    console.log("crearArticulo");
+  const crearArticulo = async (articulo) => {
+    try {
+      const result = await axios.post(
+        "https://app-gestion-articulos-mern-production.up.railway.app/article",
+        articulo
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(
+        "Error al agregar los articulos desde el servidor: ",
+        error
+      );
+    }
   };
 
   const obtenerArticulos = async () => {
@@ -39,7 +50,7 @@ const ArticuloContextProvider = (props) => {
   };
 
   const editarArticulo = (articulo) => {
-    console.log("editarArticulo");
+    console.log("editarArticulo", articulo);
   };
 
   const eliminarArticulo = async (id) => {

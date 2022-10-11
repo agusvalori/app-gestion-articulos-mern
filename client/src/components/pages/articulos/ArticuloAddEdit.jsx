@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   Button,
-  FormControl,
-  FormLabel,
   IconButton,
   Modal,
   Paper,
@@ -11,8 +9,9 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ArticuloAddEditImage } from "./ArticuloAddEditImage";
+import { useArticle } from "../../../context/ArticleContext";
 
 export const ArticuloAddEdit = ({ articulo }) => {
   const [open, setOpen] = useState(false);
@@ -28,6 +27,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
         SUB_CATEGORIA: "",
       };
   const [values, setValues] = useState(initialValues);
+  const { crearArticulo, editarArticulo } = useArticle();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -36,7 +36,12 @@ export const ArticuloAddEdit = ({ articulo }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(values);
+
+    if (articulo?.ID) {
+      editarArticulo(values);
+    } else {
+      crearArticulo(values);
+    }
   };
   const handleClose = () => {
     setOpen(!open);
@@ -44,7 +49,11 @@ export const ArticuloAddEdit = ({ articulo }) => {
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
-        {articulo?.ID ? <EditIcon color="info" /> : <AddIcon color="info" />}
+        {articulo?.ID ? (
+          <EditIcon color="info" />
+        ) : (
+          <AddCircleIcon color="info" fontSize="large" />
+        )}
       </IconButton>
       <Modal
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
