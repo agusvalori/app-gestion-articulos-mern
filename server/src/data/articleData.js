@@ -24,11 +24,7 @@ const agregarArticulo = async (req, res) => {
       SUB_CATEGORIA,
       PRECIO,
       STOCK,
-    });
-
-    //agregamos la imagen
-    //const { image } = req.files;
-    
+    });    
     
     let image = req.files['IMAGE_URL[]'];    
     
@@ -50,7 +46,6 @@ const agregarArticulo = async (req, res) => {
 
     await newArticle.save();
     
-
     res.status(200).send({
       status: true,
       message: "Articulo Agregado",
@@ -87,7 +82,6 @@ const obtenerArticulos = async (req, res) => {
 const obtenerArticuloXId = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("req.params", req.params);
     const result = await article.find({ ID: id });
     if (result.length !== 0) {
       res
@@ -110,10 +104,11 @@ const obtenerArticuloXId = async (req, res) => {
 const editarArticulo = async (req, res) => {
   try {
     const { id } = req.params;
-    let newArticle = req
-    let image = req.files['IMAGE_URL[]'];    
+    let newArticle = req.body
+  
     
-    if (image) {
+    if (req.files && req.files[Object.keys(req.files)]) {
+      let image = req.files[Object.keys(req.files)]      
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
           const result = await uploadImageCloudinary(
@@ -123,11 +118,14 @@ const editarArticulo = async (req, res) => {
           await fs.unlink(image[index]?.tempFilePath);
         }
       } else {
+        console.log("image?.tempFilePath: ",image?.tempFilePath)        
         const result = await uploadImageCloudinary(image?.tempFilePath);
-        newArticle.IMAGE_URL.push({ ...result, article_id: id });
+        console.log("result: ",result)        
+        console.log("newArticle: ",newArticle)
         await fs.unlink(image.tempFilePath);
       }
     }
+    
     const result = await article.findOneAndUpdate({ ID: id }, newArticle, {
       new: true,
     });
