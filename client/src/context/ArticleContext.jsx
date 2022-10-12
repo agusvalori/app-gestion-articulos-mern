@@ -16,7 +16,8 @@ const useArticle = () => {
 const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
-  const crearArticulo = async (articulo) => {    
+  const crearArticulo = async (articulo) => {
+    
     try {
       const result = await axios.post(
         "http://localhost:4000/article",
@@ -51,8 +52,21 @@ const ArticuloContextProvider = (props) => {
     }
   };
 
-  const editarArticulo = (articulo) => {
-    console.log("editarArticulo", articulo);
+  const editarArticulo = async (articulo) => {
+    try {
+      const result = await axios.put(
+        "http://localhost:4000/article/"+articulo.ID,
+        articulo,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(result);
+    } catch (error) {
+      console.log("Error al editar el articulo desde el servidor: ", error);
+    }
   };
 
   const eliminarArticulo = async (id) => {

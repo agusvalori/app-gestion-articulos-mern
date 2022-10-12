@@ -110,7 +110,25 @@ const obtenerArticuloXId = async (req, res) => {
 const editarArticulo = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await article.findOneAndUpdate({ ID: id }, req.body, {
+    let newArticle = req
+    let image = req.files['IMAGE_URL[]'];    
+    
+    if (image) {
+      if (Array.isArray(image)) {
+        for (let index = 0; index < image.length; index++) {
+          const result = await uploadImageCloudinary(
+            image[index]?.tempFilePath
+          );
+          newArticle.IMAGE_URL.push({ ...result, article_id: id });
+          await fs.unlink(image[index]?.tempFilePath);
+        }
+      } else {
+        const result = await uploadImageCloudinary(image?.tempFilePath);
+        newArticle.IMAGE_URL.push({ ...result, article_id: id });
+        await fs.unlink(image.tempFilePath);
+      }
+    }
+    const result = await article.findOneAndUpdate({ ID: id }, newArticle, {
       new: true,
     });
     if (result) {
