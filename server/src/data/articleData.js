@@ -28,10 +28,10 @@ const agregarArticulo = async (req, res) => {
 
     //agregamos la imagen
     //const { image } = req.files;
-    console.log("Files: ", req.files);
+    
     const { image } = false;
-    console.log("Image ", req.body);
-    console.log("REq ", req);
+    console.log("Files: ", req.files);
+    console.log("Image: ", req.body);
     /*
     if (image) {
       if (Array.isArray(image)) {

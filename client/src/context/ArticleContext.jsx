@@ -21,7 +21,12 @@ const ArticuloContextProvider = (props) => {
     try {
       const result = await axios.post(
         "https://app-gestion-articulos-mern-production.up.railway.app/article",
-        [articulo]
+        articulo,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log(result);
     } catch (error) {
