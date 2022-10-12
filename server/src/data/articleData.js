@@ -29,10 +29,9 @@ const agregarArticulo = async (req, res) => {
     //agregamos la imagen
     //const { image } = req.files;
     
-    const { image } = false;
-    console.log("Files: ", req.files);
-    console.log("Image: ", req.body);
-    /*
+    
+    let image = req.files['IMAGE_URL[]'];    
+    
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -50,7 +49,7 @@ const agregarArticulo = async (req, res) => {
     }
 
     await newArticle.save();
-    */
+    
 
     res.status(200).send({
       status: true,

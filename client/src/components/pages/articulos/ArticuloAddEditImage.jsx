@@ -9,8 +9,11 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
 
   const handleChange = (event, index) => {
     const { files } = event.target;
-    if (files.length === 1 && /.(jpeg|jpg|png)$/i.test(files[0].name)) {
-      setValues({ ...values, IMAGE_URL: [...values.IMAGE_URL, files[0]] });
+    if (files.length === 1 && /.(jpeg|jpg|png)$/i.test(files[0].name)) {                  
+      setValues({
+        ...values,
+        IMAGE_URL: [...values.IMAGE_URL, files[0]],        
+      });
       setHelperText("");
     } else {
       setHelperText(

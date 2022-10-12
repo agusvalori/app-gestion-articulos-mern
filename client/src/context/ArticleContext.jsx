@@ -16,11 +16,10 @@ const useArticle = () => {
 const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
-  const crearArticulo = async (articulo) => {
-    console.log("crearArticulo: ", articulo);
+  const crearArticulo = async (articulo) => {    
     try {
       const result = await axios.post(
-        "https://app-gestion-articulos-mern-production.up.railway.app/article",
+        "http://localhost:4000/article",
         articulo,
         {
           headers: {
