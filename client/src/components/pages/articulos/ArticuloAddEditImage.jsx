@@ -9,10 +9,10 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
 
   const handleChange = (event, index) => {
     const { files } = event.target;
-    if (files.length === 1 && /.(jpeg|jpg|png)$/i.test(files[0].name)) {                  
+    if (files.length === 1 && /.(jpeg|jpg|png)$/i.test(files[0].name)) {
       setValues({
         ...values,
-        IMAGE_URL: [...values.IMAGE_URL, files[0]],        
+        IMAGE_FILES: [...values.IMAGE_FILES, files[0]],
       });
       setHelperText("");
     } else {
@@ -23,14 +23,22 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
   };
 
   const handleImageDelete = (image) => {
-    setValues({
-      ...values,
-      IMAGE_URL: values.IMAGE_URL.filter((img) => img != image),
-    });
+    if (image.secure_url) {
+      setValues({
+        ...values,
+        IMAGE_URL: values.IMAGE_URL.filter((img) => img != image),
+      });
+    } else if (image.name) {
+      setValues({
+        ...values,
+        IMAGE_FILES: values.IMAGE_FILES.filter((img) => img != image),
+      });
+    }
   };
 
   const RenderImage = ({ image }) => {
-    if (image?.secure_url) {
+    const { secure_url, name } = image;
+    if (secure_url) {
       return (
         <Box
           key={image?.public_id}
@@ -49,7 +57,9 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
           </Box>
         </Box>
       );
-    } else {
+    }
+
+    if (name) {
       return (
         <Box
           key={image?.public_id}
@@ -84,7 +94,7 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
       >
         <label>
           <Input
-            name="IMAGE_URL"
+            name="FILES"
             type="file"
             onChange={(event) => handleChange(event, index)}
             sx={{ display: "none" }}
@@ -99,7 +109,7 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
   };
 
   const RenderItems = ({ index }) => {
-    return Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index] ? (
+    return Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index]||Array.isArray(values.FILES)? (
       <RenderImage image={values.IMAGE_URL[index]} />
     ) : (
       <RenderAddImage index={index} />

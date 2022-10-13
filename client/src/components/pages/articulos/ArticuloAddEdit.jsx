@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Button,
+  CircularProgress,
   IconButton,
   Modal,
   Paper,
@@ -21,26 +22,33 @@ export const ArticuloAddEdit = ({ articulo }) => {
         ARTICULO: "",
         CATEGORIA: "",
         ID: "",
-        IMAGE_URL: [],
+        IMAGE_URL: "",
+        IMAGE_FILES:"",
         PRECIO: 0,
         STOCK: 0,
         SUB_CATEGORIA: "",
       };
   const [values, setValues] = useState(initialValues);
   const { crearArticulo, editarArticulo } = useArticle();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     if (articulo?.ID) {
-      editarArticulo(values);
+      const result = await editarArticulo(values);
+      console.log(result);
+      setLoading(false);
     } else {
-      crearArticulo(values);
+      const result = await crearArticulo(values);
+      console.log(result);
+      setLoading(false);
     }
   };
   const handleClose = () => {
@@ -127,9 +135,15 @@ export const ArticuloAddEdit = ({ articulo }) => {
                   gridTemplateColumns: "1fr 1fr",
                 }}
               >
-                <Button type={"submit"} variant="outlined">
-                  {articulo?.ID ? "Editar" : "Agregar"}
-                </Button>
+                {loading ? (
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CircularProgress size={32} />
+                  </Box>
+                ) : (
+                  <Button type={"submit"} variant="outlined">
+                    {articulo?.ID ? "Editar" : "Agregar"}
+                  </Button>
+                )}
                 <Button variant="outlined" onClick={() => handleClose()}>
                   Cancelar
                 </Button>

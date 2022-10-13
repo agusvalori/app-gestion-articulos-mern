@@ -17,7 +17,7 @@ const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState({});
 
   const crearArticulo = async (articulo) => {
-    
+    console.log(articulo)
     try {
       const result = await axios.post(
         "http://localhost:4000/article",
@@ -28,9 +28,14 @@ const ArticuloContextProvider = (props) => {
           },
         }
       );
-      console.log(result);
+      obtenerArticulos();
+      return result;
     } catch (error) {
-      console.log("Error al agregar los articulos desde el servidor: ", error);
+      return {
+        status: false,
+        message: "Error al agregar el articulo",
+        value: error,
+      };
     }
   };
 
@@ -54,8 +59,9 @@ const ArticuloContextProvider = (props) => {
 
   const editarArticulo = async (articulo) => {
     try {
+      console.log(articulo)
       const result = await axios.put(
-        "http://localhost:4000/article/"+articulo.ID,
+        "http://localhost:4000/article/" + articulo.ID,
         articulo,
         {
           headers: {
@@ -63,7 +69,7 @@ const ArticuloContextProvider = (props) => {
           },
         }
       );
-      console.log(result);
+      return result
     } catch (error) {
       console.log("Error al editar el articulo desde el servidor: ", error);
     }
