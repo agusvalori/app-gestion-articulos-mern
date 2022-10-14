@@ -17,13 +17,13 @@ import { useArticle } from "../../../context/ArticleContext";
 export const ArticuloAddEdit = ({ articulo }) => {
   const [open, setOpen] = useState(false);
   const initialValues = articulo?.ID
-    ? articulo
+    ? {...articulo,IMAGE_FILES: []}
     : {
         ARTICULO: "",
         CATEGORIA: "",
         ID: "",
-        IMAGE_URL: "",
-        IMAGE_FILES:"",
+        IMAGE_URL: [],
+        IMAGE_FILES: [],
         PRECIO: 0,
         STOCK: 0,
         SUB_CATEGORIA: "",

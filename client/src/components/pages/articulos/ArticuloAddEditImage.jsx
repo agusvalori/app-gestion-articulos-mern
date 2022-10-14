@@ -37,6 +37,7 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
   };
 
   const RenderImage = ({ image }) => {
+    console.log("RenderImage: ",image)
     const { secure_url, name } = image;
     if (secure_url) {
       return (
@@ -94,7 +95,7 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
       >
         <label>
           <Input
-            name="FILES"
+            name="IMAGE_FILES"
             type="file"
             onChange={(event) => handleChange(event, index)}
             sx={{ display: "none" }}
@@ -109,11 +110,14 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
   };
 
   const RenderItems = ({ index }) => {
-    return Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index]||Array.isArray(values.FILES)? (
-      <RenderImage image={values.IMAGE_URL[index]} />
-    ) : (
-      <RenderAddImage index={index} />
-    );
+    if (Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index]) {
+      return <RenderImage image={values.IMAGE_URL[index]} />;
+    } else if (Array.isArray(values.IMAGE_FILES) && values.IMAGE_FILES[index]) {
+      return <RenderImage image={values.IMAGE_FILES[index]} />;
+    } else {
+      return <RenderAddImage index={index} />;
+    }
+
   };
 
   return (
