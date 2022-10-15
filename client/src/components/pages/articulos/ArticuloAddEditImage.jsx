@@ -36,52 +36,51 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
     }
   };
 
-  const RenderImage = ({ image }) => {
-    console.log("RenderImage: ",image)
-    const { secure_url, name } = image;
-    if (secure_url) {
-      return (
-        <Box
-          key={image?.public_id}
-          sx={{
-            width: "80px",
-            height: "80px",
-            backgroundImage: `url(${image.secure_url})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
-            <IconButton onClick={() => handleImageDelete(image)} size="small">
-              <RemoveCircleIcon fontSize="small" color="error" />
-            </IconButton>
-          </Box>
+  // ########################################################################
+  const RenderImageURL = ({ image }) => {
+    return (
+      <Box
+        key={image?.public_id}
+        sx={{
+          width: "80px",
+          height: "80px",
+          backgroundImage: `url(${image.secure_url})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
+          <IconButton onClick={() => handleImageDelete(image)} size="small">
+            <RemoveCircleIcon fontSize="small" color="error" />
+          </IconButton>
         </Box>
-      );
-    }
-
-    if (name) {
-      return (
-        <Box
-          key={image?.public_id}
-          sx={{
-            width: "80px",
-            height: "80px",
-            backgroundImage: `url(${URL.createObjectURL(image)})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
-            <IconButton onClick={() => handleImageDelete(image)} size="small">
-              <RemoveCircleIcon fontSize="small" color="error" />
-            </IconButton>
-          </Box>
-        </Box>
-      );
-    }
+      </Box>
+    );
   };
 
+  // ########################################################################
+  const RenderImageFiles = ({ image }) => {
+    return (
+      <Box
+        key={image?.public_id}
+        sx={{
+          width: "80px",
+          height: "80px",
+          backgroundImage: `url(${URL.createObjectURL(image)})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <Box sx={{ position: "relative", top: "-20%", left: "80%" }}>
+          <IconButton onClick={() => handleImageDelete(image)} size="small">
+            <RemoveCircleIcon fontSize="small" color="error" />
+          </IconButton>
+        </Box>
+      </Box>
+    );
+  };
+
+  // ########################################################################
   const RenderAddImage = ({ index }) => {
     return (
       <Box
@@ -109,15 +108,29 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
     );
   };
 
-  const RenderItems = ({ index }) => {
-    if (Array.isArray(values.IMAGE_URL) && values.IMAGE_URL[index]) {
-      return <RenderImage image={values.IMAGE_URL[index]} />;
-    } else if (Array.isArray(values.IMAGE_FILES) && values.IMAGE_FILES[index]) {
-      return <RenderImage image={values.IMAGE_FILES[index]} />;
-    } else {
-      return <RenderAddImage index={index} />;
-    }
+  const RenderItems = () => {
+    let imageUrl = values.IMAGE_URL;
+    let imageFiles = values.IMAGE_FILES;
+    let imageLength = imageFiles.length + imageUrl.length;
+    let renderView = [];
 
+    renderView.push(
+      values.IMAGE_URL.map((image) => (
+        <RenderImageURL key={image.public_id} image={image} />
+      ))
+    );
+
+    renderView.push(
+      values.IMAGE_FILES.map((image, index) => (
+        <RenderImageFiles key={image.name + index} image={image} />
+      ))
+    );
+
+    //renderizamos los AddImage
+    for (let index = imageLength; index < 4; index++) {
+      renderView.push(<RenderAddImage />);
+    }
+    return renderView;
   };
 
   return (
@@ -130,10 +143,7 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
             gridTemplateColumns: "1fr 1fr 1fr 1fr",
           }}
         >
-          <RenderItems index={0} />
-          <RenderItems index={1} />
-          <RenderItems index={2} />
-          <RenderItems index={3} />
+          <RenderItems />
         </Box>
         <Box>
           <Typography color={"red"} fontSize={"small"}>

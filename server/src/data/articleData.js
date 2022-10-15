@@ -3,11 +3,6 @@ import { uploadImageCloudinary } from "../lib/cloudinary.js";
 import fs from "fs-extra";
 
 const agregarArticulo = async (req, res) => {
-
-  console.log(req.files)
-  console.log("\n req.body",req.body)
-
-  
   const {
     ID,
     ARTICULO,
@@ -32,7 +27,7 @@ const agregarArticulo = async (req, res) => {
     });
 
     let image = req.files[Object.keys(req.files)[0]];
-
+    console.log("agregarArticulo: ", image);
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -108,34 +103,39 @@ const obtenerArticuloXId = async (req, res) => {
 
 const editarArticulo = async (req, res) => {
   try {
-    console.log(req.files)
-    console.log("\n req.body",req.body)
-    /*
     const { id } = req.params;
-    let newArticle = req.body;
-    console.log("editarArticulo")
-    if (req.files) {
-      let image = req.files      
-      console.log(req.files) 
+    let newArticle = req.body;    
+    let imageUrl = [];
+
+    console.log(newArticle)
+//    console.log(Object.keys(newArticle))
+
+    res.json(newArticle)
+    return
+    let image = req.files[Object.keys(req.files)[0]];
+    if (image) {
       if (Array.isArray(image)) {
-        for (let index = 0; index < image.length; index++) {          
+        for (let index = 0; index < image.length; index++) {
           const result = await uploadImageCloudinary(
-            image[index][1]?.tempFilePath
+            image[index]?.tempFilePath
           );
-          newArticle.IMAGE_URL.push({ ...result, article_id: id });
-          await fs.unlink(image[index][1]?.tempFilePath);         
+          imageUrl.push({ ...result, article_id: id });
+          await fs.unlink(image[index]?.tempFilePath);
         }
       } else {
         const result = await uploadImageCloudinary(image?.tempFilePath);
-        console.log("result: ", result);
-        console.log("newArticle: ", newArticle);
+        imageUrl.push({ ...result, article_id: id });
         await fs.unlink(image.tempFilePath);
       }
     }
 
-    const result = await article.findOneAndUpdate({ ID: id }, newArticle, {
-      new: true,
-    });
+    const result = await article.findOneAndUpdate(
+      { ID: id },
+      { ...newArticle, IMAGE_URL: imageUrl },
+      {
+        new: true,
+      }
+    );
     if (result) {
       res
         .status(200)
@@ -147,8 +147,6 @@ const editarArticulo = async (req, res) => {
         value: result,
       });
     }
-
-    */
   } catch (error) {
     res
       .status(500)
