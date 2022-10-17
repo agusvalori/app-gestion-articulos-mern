@@ -104,15 +104,13 @@ const obtenerArticuloXId = async (req, res) => {
 const editarArticulo = async (req, res) => {
   try {
     const { id } = req.params;
-    let newArticle = req.body;    
-    let imageUrl = [];
+    let newArticle = req.body;
+    let imageUrl = JSON.parse(newArticle.IMAGE_URL);
 
-    console.log(newArticle)
-//    console.log(Object.keys(newArticle))
+    let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
 
-    res.json(newArticle)
-    return
-    let image = req.files[Object.keys(req.files)[0]];
+    console.log("ImageURL: ", imageUrl);
+    console.log("\nimage: ", image);
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -128,7 +126,8 @@ const editarArticulo = async (req, res) => {
         await fs.unlink(image.tempFilePath);
       }
     }
-
+    console.log(imageUrl);
+    
     const result = await article.findOneAndUpdate(
       { ID: id },
       { ...newArticle, IMAGE_URL: imageUrl },

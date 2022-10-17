@@ -18,6 +18,7 @@ const ArticuloContextProvider = (props) => {
 
   const crearArticulo = async (articulo) => {
     console.log(articulo);
+    
     try {
       const result = await axios.post("http://localhost:4000/article", articulo);
       obtenerArticulos();
@@ -50,11 +51,10 @@ const ArticuloContextProvider = (props) => {
   };
 
   const editarArticulo = async (articulo) => {
-    try {
-      console.log(articulo);
+    try {                  
       const result = await axios.put(
         "http://localhost:4000/article/" + articulo.ID,
-        articulo,
+        {...articulo,IMAGE_URL:JSON.stringify(articulo.IMAGE_URL)},
         {
           headers: {
             "Content-Type": "multipart/form-data",
