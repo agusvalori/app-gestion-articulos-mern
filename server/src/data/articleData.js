@@ -27,7 +27,6 @@ const agregarArticulo = async (req, res) => {
     });
 
     let image = req.files[Object.keys(req.files)[0]];
-    console.log("agregarArticulo: ", image);
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -117,17 +116,26 @@ const editarArticulo = async (req, res) => {
           const result = await uploadImageCloudinary(
             image[index]?.tempFilePath
           );
-          imageUrl.push({ ...result, article_id: id });
+          
+          imageUrl.push({
+            article_id: id,
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          });
           await fs.unlink(image[index]?.tempFilePath);
         }
       } else {
         const result = await uploadImageCloudinary(image?.tempFilePath);
-        imageUrl.push({ ...result, article_id: id });
+
+        imageUrl.push({
+          article_id: id,
+          public_id: result.public_id,
+          secure_url: result.secure_url,
+        });
         await fs.unlink(image.tempFilePath);
       }
-    }
-    console.log(imageUrl);
-    
+    }    
+
     const result = await article.findOneAndUpdate(
       { ID: id },
       { ...newArticle, IMAGE_URL: imageUrl },
