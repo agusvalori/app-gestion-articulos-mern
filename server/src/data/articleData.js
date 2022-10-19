@@ -64,21 +64,21 @@ const agregarArticulo = async (req, res) => {
 const obtenerArticulos = async (req, res) => {
   try {
     const result = await article.find();
-    if (result.length !== 0) {
+    if (result.length !== 0) {      
       res
         .status(200)
         .send({ status: true, message: "Articulo encontrado", value: result });
     } else {
-      res.status(404).send({
+      res.status(200).send({
         status: true,
-        message: "Articulo No encontrado",
+        message: "No hay articulos agregados",
         value: result,
       });
-    }
+    }    
   } catch (error) {
     res
       .status(500)
-      .send({ status: true, message: "Articulo encontrado", value: result });
+      .send({ status: false, message: error.message, value: error });
   }
 };
 
@@ -230,7 +230,7 @@ const eliminarImagen = async (req, res) => {
 };
 
 const eliminarTodosLosArticulos = async (req, res) => {
-  try {    
+  try {
     const result = await article.deleteMany();
     res.status(200).send({
       status: true,
@@ -242,7 +242,7 @@ const eliminarTodosLosArticulos = async (req, res) => {
       status: false,
       message: "No se pudieron eliminar todos los articulos",
       value: error,
-    });    
+    });
   }
 };
 

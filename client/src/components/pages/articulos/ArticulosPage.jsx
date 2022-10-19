@@ -2,11 +2,11 @@ import React from "react";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useArticle } from "../../../context/ArticleContext";
 import { ArticulosTable } from "./table/ArticulosTable";
 import { ArticuloAddEdit } from "./ArticuloAddEdit";
 import { ArticuloDeleteAll } from "./table/ArticuloDeleteAll";
+import { ArticuloImport } from "./import/ArticuloImport";
 
 export const ArticulosPage = () => {
   const { articulos } = useArticle();
@@ -26,9 +26,7 @@ export const ArticulosPage = () => {
           </Paper>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <ArticuloAddEdit />
-            <IconButton>
-              <FileUploadIcon color="success" fontSize="large" />
-            </IconButton>
+            <ArticuloImport />
             {articulos?.length != 0 && (
               <IconButton>
                 <EditIcon color="info" fontSize="large" />

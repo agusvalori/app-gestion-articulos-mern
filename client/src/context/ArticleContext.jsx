@@ -44,7 +44,7 @@ const ArticuloContextProvider = (props) => {
   const obtenerArticulos = async () => {
     try {
       const result = await axios.get("http://localhost:4000/article");
-      console.log("obtenerArticulos", result);
+      
       if (result?.data?.status) {
         setArticulos(result?.data.value);
       } else {
