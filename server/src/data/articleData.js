@@ -29,7 +29,8 @@ const agregarArticulo = async (req, res) => {
       STOCK,
     });
 
-    let image = req.files[Object.keys(req.files)[0]];
+    let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
+
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
@@ -228,6 +229,23 @@ const eliminarImagen = async (req, res) => {
   }
 };
 
+const eliminarTodosLosArticulos = async (req, res) => {
+  try {    
+    const result = await article.deleteMany();
+    res.status(200).send({
+      status: true,
+      message: "Se eliminaron todos los articulos",
+      value: result,
+    });
+  } catch (error) {
+    res.status(404).send({
+      status: false,
+      message: "No se pudieron eliminar todos los articulos",
+      value: error,
+    });    
+  }
+};
+
 export {
   agregarArticulo,
   obtenerArticuloXId,
@@ -235,4 +253,5 @@ export {
   editarArticulo,
   eliminarArticulo,
   eliminarImagen,
+  eliminarTodosLosArticulos,
 };

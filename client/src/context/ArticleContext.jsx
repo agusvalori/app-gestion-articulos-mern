@@ -14,16 +14,22 @@ const useArticle = () => {
 };
 
 const ArticuloContextProvider = (props) => {
-  const [articulos, setArticulos] = useState({});
+  const [articulos, setArticulos] = useState([]);
 
   const crearArticulo = async (articulo) => {
-    console.log(articulo);
+    console.log("crearArticulo: ", articulo);
 
     try {
       const result = await axios.post(
         "http://localhost:4000/article",
-        articulo
+        articulo,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+      console.log("crearArticulo: result: ", result);
       obtenerArticulos();
       return result;
     } catch (error) {
@@ -37,9 +43,8 @@ const ArticuloContextProvider = (props) => {
 
   const obtenerArticulos = async () => {
     try {
-      const result = await axios.get(
-        "https://app-gestion-articulos-mern-production.up.railway.app/article"
-      );
+      const result = await axios.get("http://localhost:4000/article");
+      console.log("obtenerArticulos", result);
       if (result?.data?.status) {
         setArticulos(result?.data.value);
       } else {
@@ -48,7 +53,7 @@ const ArticuloContextProvider = (props) => {
     } catch (error) {
       console.log(
         "Error al obtener los articulos desde el servidor: ",
-        error.message
+        error
       );
     }
   };
@@ -66,7 +71,7 @@ const ArticuloContextProvider = (props) => {
       );
       return result;
     } catch (error) {
-      console.log("Error al editar el articulo desde el servidor: ", error);
+      return { status: false, message: error.message, value: error };
     }
   };
 
@@ -76,10 +81,7 @@ const ArticuloContextProvider = (props) => {
       await obtenerArticulos();
       return result.data;
     } catch (error) {
-      console.log(
-        "Error al eliminar los articulos desde el servidor: ",
-        error.message
-      );
+      return { status: false, message: error.message, value: error };
     }
   };
 
@@ -88,14 +90,22 @@ const ArticuloContextProvider = (props) => {
       const result = await axios.put(
         "http://localhost:4000/article/image/" + image.article_id,
         image
-      );      
+      );
       return result.data;
     } catch (error) {
-      console.log(
-        "Error al eliminar la imagen desde el servidor: ",
-        error.message,
-        error
-      );
+      return { status: false, message: error.message, value: error };
+    }
+  };
+
+  const eliminarArticulosTodos = async () => {
+    try {
+      const result = await axios.delete("http://localhost:4000/article");
+      if (result?.data?.status) {
+        obtenerArticulos();
+      }
+      return result.data;
+    } catch (error) {
+      return { status: false, message: error.message, value: error };
     }
   };
 
@@ -108,6 +118,7 @@ const ArticuloContextProvider = (props) => {
         obtenerArticulos,
         eliminarArticulo,
         eliminarImagenArticulo,
+        eliminarArticulosTodos,
       }}
     >
       {props.children}

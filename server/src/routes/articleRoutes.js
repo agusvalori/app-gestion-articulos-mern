@@ -4,6 +4,7 @@ import {
   editarArticulo,
   eliminarArticulo,
   eliminarImagen,
+  eliminarTodosLosArticulos,
   obtenerArticulos,
   obtenerArticuloXId,
 } from "../data/articleData.js";
@@ -27,5 +28,8 @@ articleRoutes.delete("/article/:id", eliminarArticulo);
 
 //Eliminamos una imagen del articulo
 articleRoutes.put("/article/image/:article_id", eliminarImagen);
+
+//Eliminamos todos los articulos
+articleRoutes.delete("/article", eliminarTodosLosArticulos);
 
 export default articleRoutes;

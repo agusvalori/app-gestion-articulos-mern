@@ -9,14 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { ArticuloAddEdit } from "../ArticuloAddEdit";
 import { ArticuloDelet } from "../ArticuloDelet";
 
 export const ArticulosTableRow = ({ articulo, index }) => {
-  const [open, setOpen] = useState(false);  
+  const [open, setOpen] = useState(false);
 
   const {
     ARTICULO,
@@ -39,7 +38,6 @@ export const ArticulosTableRow = ({ articulo, index }) => {
       return { backgroundColor: "#FAF8F6" };
     }
   });
-
 
   return (
     <>
@@ -87,13 +85,32 @@ export const ArticulosTableRow = ({ articulo, index }) => {
                 <Typography>Cantidad Bulto: {CANT_BULTO}</Typography>
                 <Typography>Descripcion: {DESCRIPCION}</Typography>
               </Box>
-              <Box>
-                <img
-                  height={"180px"}
-                  width={180}
-                  src={IMAGE_URL[0]?.secure_url}
-                  alt="imagen"
-                />
+              <Box sx={{ display: "flex" }}>
+                {Array.isArray(IMAGE_URL) &&
+                  IMAGE_URL.map((image, index) =>
+                    image ? (
+                      <Box
+                        key={image?.public_id}
+                        sx={{
+                          width: "80px",
+                          height: "80px",
+                          backgroundImage: `url(${image.secure_url})`,
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                      ></Box>
+                    ) : (
+                      <Box
+                        key={index}
+                        sx={{
+                          width: "80px",
+                          height: "80px",
+                        }}
+                      >
+                        No hay Imagenes
+                      </Box>
+                    )
+                  )}
               </Box>
             </Box>
           </Collapse>
