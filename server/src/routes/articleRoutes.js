@@ -3,6 +3,7 @@ import {
   agregarArticulo,
   editarArticulo,
   eliminarArticulo,
+  eliminarImagen,
   obtenerArticulos,
   obtenerArticuloXId,
 } from "../data/articleData.js";
@@ -23,5 +24,8 @@ articleRoutes.put("/article/:id", editarArticulo);
 
 //Eliminamos un articulo
 articleRoutes.delete("/article/:id", eliminarArticulo);
+
+//Eliminamos una imagen del articulo
+articleRoutes.put("/article/image/:article_id", eliminarImagen);
 
 export default articleRoutes;

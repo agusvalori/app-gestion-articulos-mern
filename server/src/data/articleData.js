@@ -1,5 +1,8 @@
 import article from "../entity/articleEntity.js";
-import { uploadImageCloudinary } from "../lib/cloudinary.js";
+import {
+  deleteImageCloudinary,
+  uploadImageCloudinary,
+} from "../lib/cloudinary.js";
 import fs from "fs-extra";
 
 const agregarArticulo = async (req, res) => {
@@ -107,16 +110,13 @@ const editarArticulo = async (req, res) => {
     let imageUrl = JSON.parse(newArticle.IMAGE_URL);
 
     let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
-
-    console.log("ImageURL: ", imageUrl);
-    console.log("\nimage: ", image);
     if (image) {
       if (Array.isArray(image)) {
         for (let index = 0; index < image.length; index++) {
           const result = await uploadImageCloudinary(
             image[index]?.tempFilePath
           );
-          
+
           imageUrl.push({
             article_id: id,
             public_id: result.public_id,
@@ -134,7 +134,7 @@ const editarArticulo = async (req, res) => {
         });
         await fs.unlink(image.tempFilePath);
       }
-    }    
+    }
 
     const result = await article.findOneAndUpdate(
       { ID: id },
@@ -183,10 +183,56 @@ const eliminarArticulo = async (req, res) => {
   }
 };
 
+const eliminarImagen = async (req, res) => {
+  const { public_id } = req.body;
+  const { article_id } = req.params;
+
+  const result = await deleteImageCloudinary(public_id);
+  //buscarmos articulo para eliminar url de la imagen
+  if (result.status) {
+    const findResult = await article.find({ ID: article_id });
+
+    if (Array.isArray(findResult) && findResult[0].IMAGE_URL.length > 0) {
+      let articulo = findResult[0];
+
+      const resultEditImage = await article.findOneAndUpdate(
+        { ID: article_id },
+        {
+          IMAGE_URL: articulo?.IMAGE_URL?.filter(
+            (item) => item.public_id != public_id
+          ),
+        },
+        {
+          new: true,
+        }
+      );
+
+      res.status(200).send({
+        status: true,
+        message: "Imagen elimianda de cloudinary",
+        value: resultEditImage,
+      });
+    } else {
+      res.status(404).send({
+        status: false,
+        message: "Articulo no encontrado o No posee imagen en cloudinary",
+        value: findResult,
+      });
+    }
+  } else {
+    res.status(404).send({
+      status: false,
+      message: "No se pudo eliminar la imagen de cloudinary",
+      value: result,
+    });
+  }
+};
+
 export {
   agregarArticulo,
   obtenerArticuloXId,
   obtenerArticulos,
   editarArticulo,
   eliminarArticulo,
+  eliminarImagen,
 };

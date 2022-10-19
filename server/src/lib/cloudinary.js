@@ -19,8 +19,29 @@ const uploadImageCloudinary = async (filePath) => {
 
     return result;
   } catch (error) {
-    console.log(error.message);
+    return {
+      status: false,
+      message: "uploadImageCloudinary " + error.message,
+      value: error,
+    };
   }
 };
 
-export { uploadImageCloudinary };
+const deleteImageCloudinary = async (public_id) => {
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+    return {
+      status: true,
+      message: "Imagen eliminada de Cloudinary",
+      value: result,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: "deleteImageCloudinary " + error.message,
+      value: error,
+    };
+  }
+};
+
+export { uploadImageCloudinary, deleteImageCloudinary };

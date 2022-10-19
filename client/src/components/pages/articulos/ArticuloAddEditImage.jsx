@@ -3,9 +3,11 @@ import { IconButton, Input, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { useArticle } from "../../../context/ArticleContext";
 
 export const ArticuloAddEditImage = ({ values, setValues }) => {
   const [helperText, setHelperText] = useState("");
+  const { eliminarImagenArticulo } = useArticle();
 
   const handleChange = (event, index) => {
     const { files } = event.target;
@@ -22,12 +24,15 @@ export const ArticuloAddEditImage = ({ values, setValues }) => {
     }
   };
 
-  const handleImageDelete = (image) => {
+  const handleImageDelete = async (image) => {
     if (image.secure_url) {
-      setValues({
-        ...values,
-        IMAGE_URL: values.IMAGE_URL.filter((img) => img != image),
-      });
+      const result = await eliminarImagenArticulo(image);
+      if (result?.status) {
+        setValues({
+          ...values,
+          IMAGE_URL: values.IMAGE_URL.filter((img) => img != image),
+        });
+      }
     } else if (image.name) {
       setValues({
         ...values,

@@ -18,9 +18,12 @@ const ArticuloContextProvider = (props) => {
 
   const crearArticulo = async (articulo) => {
     console.log(articulo);
-    
+
     try {
-      const result = await axios.post("http://localhost:4000/article", articulo);
+      const result = await axios.post(
+        "http://localhost:4000/article",
+        articulo
+      );
       obtenerArticulos();
       return result;
     } catch (error) {
@@ -51,10 +54,10 @@ const ArticuloContextProvider = (props) => {
   };
 
   const editarArticulo = async (articulo) => {
-    try {                  
+    try {
       const result = await axios.put(
         "http://localhost:4000/article/" + articulo.ID,
-        {...articulo,IMAGE_URL:JSON.stringify(articulo.IMAGE_URL)},
+        { ...articulo, IMAGE_URL: JSON.stringify(articulo.IMAGE_URL) },
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -69,10 +72,7 @@ const ArticuloContextProvider = (props) => {
 
   const eliminarArticulo = async (id) => {
     try {
-      const result = await axios.delete(
-        "https://app-gestion-articulos-mern-production.up.railway.app/article/" +
-          id
-      );
+      const result = await axios.delete("http://localhost:4000/article/" + id);
       await obtenerArticulos();
       return result.data;
     } catch (error) {
@@ -82,6 +82,23 @@ const ArticuloContextProvider = (props) => {
       );
     }
   };
+
+  const eliminarImagenArticulo = async (image) => {
+    try {
+      const result = await axios.put(
+        "http://localhost:4000/article/image/" + image.article_id,
+        image
+      );      
+      return result.data;
+    } catch (error) {
+      console.log(
+        "Error al eliminar la imagen desde el servidor: ",
+        error.message,
+        error
+      );
+    }
+  };
+
   return (
     <ArticuloContext.Provider
       value={{
@@ -90,6 +107,7 @@ const ArticuloContextProvider = (props) => {
         editarArticulo,
         obtenerArticulos,
         eliminarArticulo,
+        eliminarImagenArticulo,
       }}
     >
       {props.children}
