@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import { IconButton, Input, Paper, Typography } from "@mui/material";
+import { Button, IconButton, Input, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { readExcel } from "../../../../../../server/src/lib/xlsx";
+import { readExcel } from "../../../../lib/xlsx";
+import { useEffect } from "react";
 
-export const ArticuloImportSelectFile = () => {
-  const [file, setFile] = useState(false);
+export const ArticuloImportSelectFile = ({ file, setFile }) => {
   const [helperText, setHelperText] = useState("");
 
   const handleInputChange = (event) => {
     const { files } = event.target;
-
     if (files.length > 0 && /.(xls|xlsx)$/i.test(files[0].name)) {
-      setFile(files[0]);
-      const result = readExcel(files[0])
-      console.log("handleInputChange result: ",result)
+      setFile(readExcel(files[0]));
+      //setFile({ name: files[0].name, size: files[0].size.toFixed(2), rows: result,});
+      setHelperText("");
     } else {
       setHelperText("Formato invalido");
       setFile(false);
     }
   };
 
-  const RenderFileData = () => {    
+  const RenderFileData = ({ data }) => {
     return (
       <Paper>
         <Box
@@ -31,7 +30,7 @@ export const ArticuloImportSelectFile = () => {
           }}
         >
           <Typography>Nombre Archivo: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{file.name} </Typography>
+          <Typography sx={{ margin: "0px 10px" }}>{data.name} </Typography>
         </Box>
         <Box
           sx={{
@@ -40,7 +39,9 @@ export const ArticuloImportSelectFile = () => {
           }}
         >
           <Typography>Tamaño Archivo: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{file.size/1024}{" "}KB </Typography>
+          <Typography sx={{ margin: "0px 10px" }}>
+            {data.size / 1024} KB{" "}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -49,7 +50,7 @@ export const ArticuloImportSelectFile = () => {
           }}
         >
           <Typography>Total de articulos: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{file.name} </Typography>
+          <Typography sx={{ margin: "0px 10px" }}>{data.lengt}</Typography>
         </Box>
       </Paper>
     );
@@ -66,6 +67,11 @@ export const ArticuloImportSelectFile = () => {
       </Box>
     );
   };
+
+  useEffect(() => {
+    console.log("Useeffect: ",file[0])
+  }, file);
+
   return (
     <Paper sx={{ textAlign: "center" }}>
       <Typography>Seleccionar archivo excel</Typography>
@@ -90,7 +96,7 @@ export const ArticuloImportSelectFile = () => {
             </IconButton>
           </label>
         </Box>
-        {file ? <RenderFileData /> : <RenderFileError />}
+        {file ? <RenderFileData data={file} /> : <RenderFileError />}
       </Box>
     </Paper>
   );

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { IconButton, Modal, Paper, Typography } from "@mui/material";
+import { Button, IconButton, Modal, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { ArticuloImportTableRef } from "./ArticuloImportTableRef";
 import { ArticuloImportSelectFile } from "./ArticuloImportSelectFile";
+import { ArticuloImportHead } from "./ArticuloImportHead";
 
 export const ArticuloImport = () => {
   const [open, setOpen] = useState(false);
+  const [file, setFile] = useState();
 
   const handleClose = () => {
     setOpen(false);
@@ -22,16 +24,16 @@ export const ArticuloImport = () => {
         open={open}
         onClose={handleClose}
       >
-        <Paper elevation={4} sx={{ padding: "10px" }}>
-          <Box>
-            <Typography sx={{ textAlign: "center" }}>
-              Importar artiulos desde excel
-            </Typography>
-          </Box>
+        <Paper elevation={4} sx={{ padding: "10px", display:'grid', rowGap:'10px' }}>
+          <ArticuloImportHead />
 
           <ArticuloImportTableRef />
 
-          <ArticuloImportSelectFile />
+          <ArticuloImportSelectFile file={file} setFile={setFile} />
+          <Box>
+            <Button color={"success"}>Importar</Button>
+            <Button color={"warning"}>Cancelar</Button>
+          </Box>
         </Paper>
       </Modal>
     </Box>
