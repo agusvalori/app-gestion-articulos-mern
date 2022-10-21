@@ -8,7 +8,7 @@ import { ArticuloImportHead } from "./ArticuloImportHead";
 
 export const ArticuloImport = () => {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(false);
 
   const handleClose = () => {
     setOpen(false);

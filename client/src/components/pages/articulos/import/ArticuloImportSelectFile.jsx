@@ -11,8 +11,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
   const handleInputChange = (event) => {
     const { files } = event.target;
     if (files.length > 0 && /.(xls|xlsx)$/i.test(files[0].name)) {
-      setFile(readExcel(files[0]));
-      //setFile({ name: files[0].name, size: files[0].size.toFixed(2), rows: result,});
+      readExcel(files[0], setFile);      
       setHelperText("");
     } else {
       setHelperText("Formato invalido");
@@ -20,7 +19,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
     }
   };
 
-  const RenderFileData = ({ data }) => {
+  const RenderFileData = () => {
     return (
       <Paper>
         <Box
@@ -30,7 +29,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
           }}
         >
           <Typography>Nombre Archivo: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{data.name} </Typography>
+          <Typography sx={{ margin: "0px 10px" }}>{file?.name} </Typography>
         </Box>
         <Box
           sx={{
@@ -40,7 +39,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
         >
           <Typography>Tamaño Archivo: </Typography>
           <Typography sx={{ margin: "0px 10px" }}>
-            {data.size / 1024} KB{" "}
+            {file?.size / 1024} KB{" "}
           </Typography>
         </Box>
         <Box
@@ -50,7 +49,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
           }}
         >
           <Typography>Total de articulos: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{data.lengt}</Typography>
+          <Typography sx={{ margin: "0px 10px" }}>{file?.rows?.length}</Typography>
         </Box>
       </Paper>
     );
@@ -67,10 +66,6 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
       </Box>
     );
   };
-
-  useEffect(() => {
-    console.log("Useeffect: ",file[0])
-  }, file);
 
   return (
     <Paper sx={{ textAlign: "center" }}>
@@ -96,7 +91,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
             </IconButton>
           </label>
         </Box>
-        {file ? <RenderFileData data={file} /> : <RenderFileError />}
+        {file? <RenderFileData  /> : <RenderFileError />}
       </Box>
     </Paper>
   );
