@@ -3,15 +3,25 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import { Button, IconButton, Input, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { readExcel } from "../../../../lib/xlsx";
-import { useEffect } from "react";
 
 export const ArticuloImportSelectFile = ({ file, setFile }) => {
   const [helperText, setHelperText] = useState("");
+  const colValidas = [
+    "ID",
+    "ARTICULO",
+    "DESCRIPCION",
+    "CANT_BULTO",
+    "CATEGORIA",
+    "SUB_CATEGORIA",
+    "IMAGE_URL",
+    "PRECIO",
+    "STOCK",
+  ];
 
   const handleInputChange = (event) => {
     const { files } = event.target;
     if (files.length > 0 && /.(xls|xlsx)$/i.test(files[0].name)) {
-      readExcel(files[0], setFile);      
+      readExcel(files[0], setFile);
       setHelperText("");
     } else {
       setHelperText("Formato invalido");
@@ -21,7 +31,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
 
   const RenderFileData = () => {
     return (
-      <Paper>
+      <Paper sx={{ padding: "5px" }}>
         <Box
           sx={{
             display: "flex",
@@ -49,7 +59,74 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
           }}
         >
           <Typography>Total de articulos: </Typography>
-          <Typography sx={{ margin: "0px 10px" }}>{file?.rows?.length}</Typography>
+          <Typography sx={{ margin: "0px 10px" }}>
+            {file?.rows?.length}
+          </Typography>
+        </Box>
+
+        <Box>
+          <Box>
+            <Typography>Columnas Invalidas: </Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {Array.isArray(file.rows) &&
+                Object.keys(file.rows[0]).map((item, index) => {
+                  if (!colValidas.includes(item)) {
+                    return (
+                      <Typography
+                        key={item + index}
+                        sx={{
+                          padding: "3px",
+                          margin: "0px 5px",
+                          border: "1px solid red",
+                          backgroundColor:'red',
+                          color:'white',
+                          borderRadius: "5px",
+                          fontSize:'small'
+                        }}
+                      >
+                        {item}
+                      </Typography>
+                    );
+                  }
+                })}
+            </Box>
+
+            <Typography>Columnas Validas: </Typography>
+
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateRows:'auto'
+              }}
+            >
+              {Array.isArray(file.rows) &&
+                Object.keys(file.rows[0]).map((item, index) => {
+                  if (colValidas.includes(item)) {
+                    return (
+                      <Typography
+                        key={item + index}
+                        sx={{
+                          padding: "2px",
+                          margin: "0px 5px",
+                          border: "1px solid green",
+                          backgroundColor:'green',
+                          color:'white',
+                          borderRadius: "5px",
+                        }}
+                      >
+                        {item}
+                      </Typography>
+                    );
+                  }
+                })}
+            </Box>
+          </Box>
         </Box>
       </Paper>
     );
@@ -91,7 +168,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
             </IconButton>
           </label>
         </Box>
-        {file? <RenderFileData  /> : <RenderFileError />}
+        {file ? <RenderFileData /> : <RenderFileError />}
       </Box>
     </Paper>
   );

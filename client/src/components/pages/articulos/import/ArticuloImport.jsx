@@ -24,15 +24,25 @@ export const ArticuloImport = () => {
         open={open}
         onClose={handleClose}
       >
-        <Paper elevation={4} sx={{ padding: "10px", display:'grid', rowGap:'10px' }}>
+        <Paper
+          elevation={4}
+          sx={{ padding: "10px", display: "grid", rowGap: "10px" }}
+        >
           <ArticuloImportHead />
 
           <ArticuloImportTableRef />
 
           <ArticuloImportSelectFile file={file} setFile={setFile} />
-          <Box>
-            <Button color={"success"}>Importar</Button>
-            <Button color={"warning"}>Cancelar</Button>
+          <Box
+            sx={{
+              padding: "0% 20%",
+              display: "grid",
+              rowGap:'5px',
+              gridTemplateColumns: "100px 100px",
+            }}
+          >
+            {file && <Button variant="outlined" color={"success"}>Importar</Button>}
+            <Button variant="outlined" color={"warning"}>Cancelar</Button>
           </Box>
         </Paper>
       </Modal>
