@@ -4,19 +4,14 @@ import { Button, IconButton, Input, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { readExcel } from "../../../../lib/xlsx";
 
-export const ArticuloImportSelectFile = ({ file, setFile }) => {
+export const ArticuloImportSelectFile = ({
+  file,
+  setFile,
+  colPermitidas,
+  colValidas,
+  setColValidas,
+}) => {
   const [helperText, setHelperText] = useState("");
-  const colValidas = [
-    "ID",
-    "ARTICULO",
-    "DESCRIPCION",
-    "CANT_BULTO",
-    "CATEGORIA",
-    "SUB_CATEGORIA",
-    "IMAGE_URL",
-    "PRECIO",
-    "STOCK",
-  ];
 
   const handleInputChange = (event) => {
     const { files } = event.target;
@@ -30,6 +25,15 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
   };
 
   const RenderFileData = () => {
+    setColValidas(
+      Object.keys(file.rows[0]).filter(
+        (item) => colPermitidas.indexOf(item) != -1
+      )
+    );
+    const colInvalidas = Object.keys(file.rows[0]).filter(
+      (item) => colPermitidas.indexOf(item) === -1
+    );
+
     return (
       <Paper sx={{ padding: "5px" }}>
         <Box
@@ -66,7 +70,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
 
         <Box>
           <Box>
-            <Typography>Columnas Invalidas: </Typography>
+            <Typography>Columnas Invalidas: {colInvalidas?.length} </Typography>
 
             <Box
               sx={{
@@ -76,7 +80,7 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
             >
               {Array.isArray(file.rows) &&
                 Object.keys(file.rows[0]).map((item, index) => {
-                  if (!colValidas.includes(item)) {
+                  if (!colPermitidas.includes(item)) {
                     return (
                       <Typography
                         key={item + index}
@@ -84,10 +88,10 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
                           padding: "3px",
                           margin: "0px 5px",
                           border: "1px solid red",
-                          backgroundColor:'red',
-                          color:'white',
+                          backgroundColor: "red",
+                          color: "white",
                           borderRadius: "5px",
-                          fontSize:'small'
+                          fontSize: "small",
                         }}
                       >
                         {item}
@@ -97,17 +101,17 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
                 })}
             </Box>
 
-            <Typography>Columnas Validas: </Typography>
+            <Typography>Columnas Validas: {colValidas?.length} </Typography>
 
             <Box
               sx={{
-                display: "grid",
-                gridTemplateRows:'auto'
+                display: "flex",
+                justifyContent: "center",
               }}
             >
               {Array.isArray(file.rows) &&
                 Object.keys(file.rows[0]).map((item, index) => {
-                  if (colValidas.includes(item)) {
+                  if (colPermitidas.includes(item)) {
                     return (
                       <Typography
                         key={item + index}
@@ -115,8 +119,8 @@ export const ArticuloImportSelectFile = ({ file, setFile }) => {
                           padding: "2px",
                           margin: "0px 5px",
                           border: "1px solid green",
-                          backgroundColor:'green',
-                          color:'white',
+                          backgroundColor: "green",
+                          color: "white",
                           borderRadius: "5px",
                         }}
                       >
