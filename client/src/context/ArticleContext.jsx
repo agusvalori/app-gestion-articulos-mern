@@ -17,8 +17,6 @@ const ArticuloContextProvider = (props) => {
   const [articulos, setArticulos] = useState([]);
 
   const crearArticulo = async (articulo) => {
-    console.log("crearArticulo: ", articulo);
-
     try {
       const result = await axios.post(
         "http://localhost:4000/article",
@@ -44,17 +42,24 @@ const ArticuloContextProvider = (props) => {
   const obtenerArticulos = async () => {
     try {
       const result = await axios.get("http://localhost:4000/article");
-      
+
       if (result?.data?.status) {
         setArticulos(result?.data.value);
       } else {
         console.log("No se puede obtener los articulos");
       }
     } catch (error) {
-      console.log(
-        "Error al obtener los articulos desde el servidor: ",
-        error
-      );
+      console.log("Error al obtener los articulos desde el servidor: ", error);
+    }
+  };
+
+  const obtenerArticuloXId = async (ID) => {
+    try {
+      const result = await axios.get("http://localhost:4000/article/" + ID);
+      console.log("obtenerArticuloXId", result);
+      return result;
+    } catch (error) {
+      return { status: false, message: error.message, value: error };
     }
   };
 
@@ -116,6 +121,7 @@ const ArticuloContextProvider = (props) => {
         crearArticulo,
         editarArticulo,
         obtenerArticulos,
+        obtenerArticuloXId,
         eliminarArticulo,
         eliminarImagenArticulo,
         eliminarArticulosTodos,
