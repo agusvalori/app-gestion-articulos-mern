@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   IconButton,
   InputLabel,
@@ -20,9 +21,9 @@ export const ArticulosEditAll = ({ articulos }) => {
   const [subCategorias, setSubCategorias] = useState([]);
   const [proveedor, setProveedor] = useState([]);
   const initialValuesSelect = {
-    PROVEEDOR: false,
-    CATEGORIA: false,
-    SUB_CATEGORIA: false,
+    PROVEEDOR: "Todos",
+    CATEGORIA: "Todos",
+    SUB_CATEGORIA: "Todos",
   };
   const [valuesSelect, setValuesSelect] = useState(initialValuesSelect);
   const [articulosFiltrados, setArticulosFiltrados] = useState(
@@ -35,20 +36,57 @@ export const ArticulosEditAll = ({ articulos }) => {
 
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
+
     setValuesSelect({ ...valuesSelect, [name]: value });
   };
 
-  useEffect(() => {
-    console.log("Actualizando articulos filtrados");
-    setArticulosFiltrados(
-      articulos
-        .filter(
-          (item) =>
-            valuesSelect?.CATEGORIA &&
-            item?.CATEGORIA === valuesSelect?.CATEGORIA
+  const filtrarArticulos = () => {
+    console.log("Filtrar x: ", valuesSelect);
+    setArticulosFiltrados(articulos);
+
+    if (valuesSelect?.PROVEEDOR != "Todos") {
+      setArticulosFiltrados(
+        articulosFiltrados.filter(
+          (item) => item?.PROVEEDOR === valuesSelect?.PROVEEDOR
         )
-    );
-  }, [valuesSelect]);
+      );
+      if (valuesSelect?.CATEGORIA != "Todos") {
+        setArticulosFiltrados(
+          articulosFiltrados.filter(
+            (item) => item?.CATEGORIA === valuesSelect?.CATEGORIA
+          )
+        );
+      }
+
+      if (valuesSelect?.SUB_CATEGORIA != "Todos") {
+        setArticulosFiltrados(
+          articulosFiltrados.filter((item) =>
+            item?.SUB_CATEGORIA?.toString()?.includes(
+              valuesSelect?.SUB_CATEGORIA
+            )
+          )
+        );
+      }
+    } else {
+      if (valuesSelect?.CATEGORIA != "Todos") {
+        setArticulosFiltrados(
+          articulos.filter(
+            (item) => item?.CATEGORIA === valuesSelect?.CATEGORIA
+          )
+        );
+      }
+
+      if (valuesSelect?.SUB_CATEGORIA != "Todos") {
+        setArticulosFiltrados(
+          articulosFiltrados.filter((item) =>
+            item?.SUB_CATEGORIA?.toString()?.includes(
+              valuesSelect?.SUB_CATEGORIA
+            )
+          )
+        );
+      }
+    }
+  };
 
   useEffect(() => {
     if (open) {
@@ -57,22 +95,22 @@ export const ArticulosEditAll = ({ articulos }) => {
           new Set(
             articulos
               ?.filter((item) => item?.CATEGORIA != undefined)
-              .map((item) => item.CATEGORIA)
+              ?.map((item) => item.CATEGORIA)
           )
         ).sort()
       );
       setSubCategorias(
         Array.from(
           new Set(
-            articulos
+            articulosFiltrados
               ?.filter((item) => item?.SUB_CATEGORIA != undefined)
-              .map((item) => item?.SUB_CATEGORIA?.split(","))
-              .reduce((pre, cur) => pre.concat(cur))
+              ?.map((item) => item?.SUB_CATEGORIA?.split(","))
+              ?.reduce((pre, cur) => pre.concat(cur))
           )
         ).sort()
       );
     }
-  }, [open]);
+  }, [open, setArticulosFiltrados]);
 
   return (
     <Box>
@@ -80,77 +118,87 @@ export const ArticulosEditAll = ({ articulos }) => {
         <EditIcon color="info" fontSize="large" />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
-        <Paper>
-          <Box>Editar articulos por grupo</Box>
-          <Box>
-            <Typography>Filtrado</Typography>
-            <Box>
-              <FormControl sx={{ width: "250px" }}>
-                <InputLabel>Categoria</InputLabel>
-                <Select
-                  name="CATEGORIA"
-                  value={valuesSelect.CATEGORIA}
-                  onChange={handleChangeSelect}
-                >
-                  {categorias?.map(
-                    (item) =>
-                      item != undefined && (
-                        <MenuItem key={item} value={item}>
-                          {item}
-                        </MenuItem>
-                      )
-                  )}
-                </Select>
-              </FormControl>
+        <Paper sx={{ padding: "5px", display: "grid", rowGap: "10px" }}>
+          <Paper>
+            <Box sx={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
+              <Box sx={{ display: "grid", rowGap: "10px" }}>
+                <Typography>Filtrado</Typography>
+                <Box>
+                  <FormControl sx={{ width: "250px" }}>
+                    <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
+                    <Select
+                      name="CATEGORIA"
+                      value={valuesSelect?.CATEGORIA}
+                      onChange={handleChangeSelect}
+                    >
+                      <MenuItem value={"Todos"}>Todos</MenuItem>
+                      {categorias?.map(
+                        (item) =>
+                          item != undefined && (
+                            <MenuItem key={item} value={item}>
+                              {item}
+                            </MenuItem>
+                          )
+                      )}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl sx={{ width: "250px" }}>
+                    <InputLabel sx={{ margin: "10px" }}>
+                      Subcategoria
+                    </InputLabel>
+                    <Select
+                      name="SUB_CATEGORIA"
+                      value={valuesSelect.SUB_CATEGORIA}
+                      onChange={handleChangeSelect}
+                    >
+                      <MenuItem value={"Todos"}>Todos</MenuItem>
+                      {subCategorias?.map(
+                        (item) =>
+                          item != undefined && (
+                            <MenuItem key={item} value={item}>
+                              {item}
+                            </MenuItem>
+                          )
+                      )}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              <Box>
+                <FormControl sx={{ width: "250px" }}>
+                  <InputLabel sx={{ margin: "10px" }}>Proveedor</InputLabel>
+                  <Select
+                    name="PROVEEDOR"
+                    value={valuesSelect.PROVEEDOR}
+                    onChange={handleChangeSelect}
+                  >
+                    <MenuItem value={"Todos"}>Todos</MenuItem>
+                    {proveedor?.map(
+                      (item) =>
+                        item != undefined && (
+                          <MenuItem key={item} value={item}>
+                            {item}
+                          </MenuItem>
+                        )
+                    )}
+                  </Select>
+                </FormControl>
+              </Box>
             </Box>
             <Box>
-              <FormControl sx={{ width: "250px" }}>
-                <InputLabel>Subcategoria</InputLabel>
-                <Select
-                  name="SUB_CATEGORIA"
-                  value={valuesSelect.SUB_CATEGORIA}
-                  onChange={handleChangeSelect}
-                >
-                  {subCategorias?.map(
-                    (item) =>
-                      item != undefined && (
-                        <MenuItem key={item} value={item}>
-                          {item}
-                        </MenuItem>
-                      )
-                  )}
-                </Select>
-              </FormControl>
+              <Button>Limpiar</Button>
+              <Button onClick={filtrarArticulos}>Filtrar</Button>
             </Box>
-            <Box>
-              <FormControl sx={{ width: "250px" }}>
-                <InputLabel>Proveedor</InputLabel>
-                <Select
-                  name="PROVEEDOR"
-                  value={valuesSelect.PROVEEDOR}
-                  onChange={handleChangeSelect}
-                >
-                  {proveedor?.map(
-                    (item) =>
-                      item != undefined && (
-                        <MenuItem key={item} value={item}>
-                          {item}
-                        </MenuItem>
-                      )
-                  )}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box>
-              <FormControl sx={{ width: "250px" }}></FormControl>
-            </Box>
-          </Box>
-          <Box>
+          </Paper>
+
+          <Paper>
             <Typography>Editado</Typography>
             que vamos a editar: precios, restar o sumar un valor precios, restar
             o sumar un % Categorias: cambiar nombre acategorias Subcategoria:
             cambiar nombre subcategoria
-          </Box>
+          </Paper>
           <Box>
             <ArticuloTableVir articulos={articulosFiltrados} />
           </Box>
