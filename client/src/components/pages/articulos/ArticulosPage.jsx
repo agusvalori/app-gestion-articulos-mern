@@ -6,7 +6,7 @@ import { ArticuloAddEdit } from "./ArticuloAddEdit";
 import { ArticuloDeleteAll } from "./ArticuloDeleteAll";
 import { ArticuloImport } from "./import/ArticuloImport";
 import { ArticuloTableVir } from "./table-virtualized/ArticuloTableVir";
-import { ArticulosEditAll } from "./ArticulosEditAll";
+import { ArticulosEditAll } from "./edit-all/ArticulosEditAll";
 
 export const ArticulosPage = () => {
   const { articulos } = useArticle();
