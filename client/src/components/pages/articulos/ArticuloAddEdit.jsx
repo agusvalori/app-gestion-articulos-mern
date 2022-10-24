@@ -116,7 +116,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                   name="PRECIO"
                   label="PRECIO"
                   onChange={(event) => handleChange(event)}
-                  value={values?.PRECIO}
+                  value={values?.PRECIO?.toFixed(2)}
                 />
                 <TextField
                   sx={{ width: "100%" }}

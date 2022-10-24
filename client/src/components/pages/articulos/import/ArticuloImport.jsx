@@ -6,7 +6,6 @@ import {
   Modal,
   Paper,
   Snackbar,
-  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -42,25 +41,36 @@ export const ArticuloImport = () => {
 
   const handleImportar = () => {
     console.log("importando articulos");
-    console.log(
-      Object.keys(file.rows[0]).filter(
-        (item) => colPermitidas.indexOf(item) != -1
-      )
-    );
+
     if (
       Object.keys(file.rows[0]).filter(
         (item) => colPermitidas.indexOf(item) != -1
       ).length > 0
     ) {
       file.rows.forEach(async (articulo, index) => {
-        const res = await obtenerArticuloXId(articulo.ID)
-        console.log(res.status)
+        const res = await obtenerArticuloXId(articulo.ID);
+
         if (res.status) {
-          const result = await editarArticulo(articulo);
-          console.log("Editando articulo ", index, " de ", file.rows.length,result);
+          const result = await editarArticulo({
+            ...articulo,
+            _id: res.value[0]._id,
+          });
+          console.log(
+            "Editando articulo ",
+            index,
+            " de ",
+            file.rows.length,
+            result
+          );
         } else {
           const result = await crearArticulo(articulo);
-          console.log("Cargando articulo ", index, " de ", file.rows.length, result);
+          console.log(
+            "Cargando articulo ",
+            index,
+            " de ",
+            file.rows.length,
+            result
+          );
         }
       });
     } else {

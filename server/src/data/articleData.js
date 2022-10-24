@@ -63,8 +63,8 @@ const agregarArticulo = async (req, res) => {
 
 const obtenerArticulos = async (req, res) => {
   try {
-    const result = await article.find();
-    if (result.length !== 0) {      
+    const result = await article.find().sort({ID:1});
+    if (result.length !== 0) {
       res
         .status(200)
         .send({ status: true, message: "Articulo encontrado", value: result });
@@ -74,7 +74,7 @@ const obtenerArticulos = async (req, res) => {
         message: "No hay articulos agregados",
         value: result,
       });
-    }    
+    }
   } catch (error) {
     res
       .status(500)
@@ -104,11 +104,15 @@ const obtenerArticuloXId = async (req, res) => {
   }
 };
 
-const editarArticulo = async (req, res) => {
+const editarArticulo = async (req, res) => {  
+  console.log("editarArticulo: ", req.params, req.body)
   try {
     const { id } = req.params;
-    let newArticle = req.body;
-    let imageUrl = JSON.parse(newArticle.IMAGE_URL);
+    let newArticle = new article(req.body);    
+
+    let imageUrl = req?.body?.IMAGE_URL
+        ? JSON.parse(req?.body?.IMAGE_URL)
+        : [];
 
     let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
     if (image) {
@@ -117,7 +121,6 @@ const editarArticulo = async (req, res) => {
           const result = await uploadImageCloudinary(
             image[index]?.tempFilePath
           );
-
           imageUrl.push({
             article_id: id,
             public_id: result.public_id,
@@ -127,7 +130,6 @@ const editarArticulo = async (req, res) => {
         }
       } else {
         const result = await uploadImageCloudinary(image?.tempFilePath);
-
         imageUrl.push({
           article_id: id,
           public_id: result.public_id,
@@ -137,25 +139,26 @@ const editarArticulo = async (req, res) => {
       }
     }
 
-    const result = await article.findOneAndUpdate(
-      { ID: id },
-      { ...newArticle, IMAGE_URL: imageUrl },
-      {
-        new: true,
-      }
-    );
-    if (result) {
+    console.log("preupdate");
+    const update = await article.updateOne({ ID: id }, newArticle);
+    if (imageUrl.length <= 4) {
+      await article.updateOne({ ID: id }, { IMAGE_URL: imageUrl });
+    } else {
+      console.log("No se puede agregar mas de 4 imagenes");
+    }
+
+    if (update.matchedCount > 0 || update.modifiedCount > 0) {
       res
         .status(200)
-        .send({ status: true, message: "Articulo editado", value: result });
+        .send({ status: true, message: "Articulo editado", value: update });
     } else {
       res.status(404).send({
         status: false,
         message: "Articulo no editado o articulo invalido",
-        value: result,
+        value: update,
       });
     }
-  } catch (error) {
+  } catch (error) {    
     res
       .status(500)
       .send({ status: false, message: error.message, value: error });

@@ -3,10 +3,10 @@ import { Box, IconButton, Paper, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { useArticle } from "../../../context/ArticleContext";
-import { ArticulosTable } from "./table/ArticulosTable";
 import { ArticuloAddEdit } from "./ArticuloAddEdit";
-import { ArticuloDeleteAll } from "./table/ArticuloDeleteAll";
+import { ArticuloDeleteAll } from "./ArticuloDeleteAll";
 import { ArticuloImport } from "./import/ArticuloImport";
+import { ArticuloTableVir } from "./table-virtualized/ArticuloTableVir";
 
 export const ArticulosPage = () => {
   const { articulos } = useArticle();
@@ -21,10 +21,16 @@ export const ArticulosPage = () => {
                 : "No hay articulos"}
             </Typography>
           </Box>
-          <Paper sx={{ maxHeight: "70vh" }}>
-            <ArticulosTable articulos={articulos} />
-          </Paper>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+
+          <ArticuloTableVir articulos={articulos} />
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <ArticuloAddEdit />
             <ArticuloImport />
             {articulos?.length != 0 && (

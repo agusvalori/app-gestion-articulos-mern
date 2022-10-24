@@ -57,7 +57,7 @@ const ArticuloContextProvider = (props) => {
     try {
       const result = await axios.get("http://localhost:4000/article/" + ID);
       console.log("obtenerArticuloXId", result);
-      return result;
+      return result.data;
     } catch (error) {
       return { status: false, message: error.message, value: error };
     }
@@ -74,7 +74,7 @@ const ArticuloContextProvider = (props) => {
           },
         }
       );
-      return result;
+      return result.data;
     } catch (error) {
       return { status: false, message: error.message, value: error };
     }

@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useArticle } from "../../../../context/ArticleContext";
+import { useArticle } from "../../../context/ArticleContext";
 
 export const ArticuloDeleteAll = ({ articulos }) => {
   const [open, setOpen] = useState(false);
