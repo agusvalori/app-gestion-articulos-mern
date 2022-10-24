@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 
 import { useArticle } from "../../../context/ArticleContext";
 import { ArticuloAddEdit } from "./ArticuloAddEdit";
 import { ArticuloDeleteAll } from "./ArticuloDeleteAll";
 import { ArticuloImport } from "./import/ArticuloImport";
 import { ArticuloTableVir } from "./table-virtualized/ArticuloTableVir";
+import { ArticulosEditAll } from "./ArticulosEditAll";
 
 export const ArticulosPage = () => {
   const { articulos } = useArticle();
@@ -34,9 +34,7 @@ export const ArticulosPage = () => {
             <ArticuloAddEdit />
             <ArticuloImport />
             {articulos?.length != 0 && (
-              <IconButton>
-                <EditIcon color="info" fontSize="large" />
-              </IconButton>
+              <ArticulosEditAll articulos={articulos} />
             )}
             {articulos?.length != 0 && (
               <ArticuloDeleteAll articulos={articulos} />
