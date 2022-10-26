@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FixedSizeList } from "react-window";
 import { Box } from "@mui/system";
-import {
-    Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { ArticuloAddEdit } from "../ArticuloAddEdit";
 import { ArticuloDelet } from "../ArticuloDelet";
 
@@ -64,7 +57,7 @@ export const ArticuloTableVir = ({ articulos }) => {
   };
 
   return (
-    <Paper sx={{padding:'5px',}}>
+    <Paper sx={{ padding: "5px" }}>
       <Box
         sx={{
           display: "grid",
