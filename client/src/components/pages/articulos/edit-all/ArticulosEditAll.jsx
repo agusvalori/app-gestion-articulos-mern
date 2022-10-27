@@ -34,7 +34,7 @@ export const ArticulosEditAll = ({ articulos }) => {
         <EditIcon color="info" fontSize="large" />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
-        <Paper sx={{ padding: "5px", display: "grid", rowGap: "10px" }}>
+        <Paper sx={{ padding: "5px", display: "grid", rowGap: "10px",  }}>
           <ArtEditAllSelect
             articulos={articulos}
             articulosFiltrados={articulosFiltrados}

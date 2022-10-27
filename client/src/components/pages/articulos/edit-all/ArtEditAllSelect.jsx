@@ -7,6 +7,10 @@ import {
   FormControl,
   Select,
   Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  AccordionActions,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -57,8 +61,8 @@ export const ArtEditAllSelect = ({
     }
   };
 
-  useEffect(() => {    
-    if (valuesSelect.CATEGORIA != "Todos") {      
+  useEffect(() => {
+    if (valuesSelect.CATEGORIA != "Todos") {
       let array = articulos
         ?.filter(
           (item) =>
@@ -80,7 +84,7 @@ export const ArtEditAllSelect = ({
   }, [valuesSelect]);
 
   useEffect(() => {
-    if (open) {      
+    if (open) {
       setCategorias(
         Array.from(
           new Set(
@@ -95,58 +99,67 @@ export const ArtEditAllSelect = ({
 
   return (
     <Paper>
-      <Box sx={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
-        <Box sx={{ display: "grid", rowGap: "10px" }}>
-          <Typography>Filtrado</Typography>
-          <Box>
-            <FormControl sx={{ width: "250px" }}>
-              <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
-              <Select
-                name="CATEGORIA"
-                value={valuesSelect?.CATEGORIA}
-                onChange={handleChangeSelect}
-              >
-                <MenuItem value={"Todos"}>Todos</MenuItem>
-                {categorias?.map(
-                  (item) =>
-                    item != undefined && (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    )
-                )}
-              </Select>
-            </FormControl>
+      <Accordion>
+        <AccordionSummary>
+          <Typography>Filtrar articulos</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
+            <Box sx={{ display: "grid", rowGap: "10px" }}>
+              <Typography>Filtrado</Typography>
+              <Box>
+                <FormControl sx={{ width: "250px" }}>
+                  <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
+                  <Select
+                    name="CATEGORIA"
+                    value={valuesSelect?.CATEGORIA}
+                    onChange={handleChangeSelect}
+                  >
+                    <MenuItem value={"Todos"}>Todos</MenuItem>
+                    {categorias?.map(
+                      (item) =>
+                        item != undefined && (
+                          <MenuItem key={item} value={item}>
+                            {item}
+                          </MenuItem>
+                        )
+                    )}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl
+                  disabled={valuesSelect?.CATEGORIA === "Todos"}
+                  sx={{ width: "250px" }}
+                >
+                  <InputLabel sx={{ margin: "10px" }}>Subcategoria</InputLabel>
+                  <Select
+                    name="SUB_CATEGORIA"
+                    value={valuesSelect.SUB_CATEGORIA}
+                    onChange={handleChangeSelect}
+                  >
+                    <MenuItem value={"Todos"}>Todos</MenuItem>
+                    {subCategorias?.map(
+                      (item) =>
+                        item != undefined && (
+                          <MenuItem key={item} value={item}>
+                            {item}
+                          </MenuItem>
+                        )
+                    )}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
           </Box>
+        </AccordionDetails>
+        <AccordionActions>
           <Box>
-            <FormControl
-              disabled={valuesSelect?.CATEGORIA === "Todos"}
-              sx={{ width: "250px" }}
-            >
-              <InputLabel sx={{ margin: "10px" }}>Subcategoria</InputLabel>
-              <Select
-                name="SUB_CATEGORIA"
-                value={valuesSelect.SUB_CATEGORIA}
-                onChange={handleChangeSelect}
-              >
-                <MenuItem value={"Todos"}>Todos</MenuItem>
-                {subCategorias?.map(
-                  (item) =>
-                    item != undefined && (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    )
-                )}
-              </Select>
-            </FormControl>
+            <Button>Limpiar</Button>
+            <Button onClick={filtrarArticulos}>Filtrar</Button>
           </Box>
-        </Box>
-      </Box>
-      <Box>
-        <Button>Limpiar</Button>
-        <Button onClick={filtrarArticulos}>Filtrar</Button>
-      </Box>
+        </AccordionActions>
+      </Accordion>
     </Paper>
   );
 };
