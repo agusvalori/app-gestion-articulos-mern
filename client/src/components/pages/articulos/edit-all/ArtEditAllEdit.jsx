@@ -1,7 +1,6 @@
 import {
   FormControl,
   InputLabel,
-  Paper,
   TextField,
   Typography,
   Select,
@@ -9,83 +8,52 @@ import {
   Button,
   Accordion,
   AccordionSummary,
+  AccordionDetails,
+  AccordionActions,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ArtEditAllEditPrecio } from "./ArtEditAllEditPrecio";
+import { ArtEditAllEditCat } from "./ArtEditAllEditCat";
+import { ArtEditAllEditSubcat } from "./ArtEditAllEditSubcat";
 
-export const ArtEditAllEdit = () => {
+export const ArtEditAllEdit = ({ articulosFiltrados }) => {
+  const [categorias, setCategorias] = useState([]);
+  const [subCategorias, setSubCategorias] = useState([])
+
+  useEffect(() => {
+    setCategorias(
+      Array.from(
+        new Set(
+          articulosFiltrados
+            ?.filter((item) => item?.CATEGORIA != undefined)
+            ?.map((item) => item.CATEGORIA)
+        )
+      ).sort()
+    );
+  }, []);
+
   return (
-    <Paper>
-      <Accordion>
-        <AccordionSummary>
-          <Typography>Editar precio</Typography>
-        </AccordionSummary>
-        <Box>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>Editar precio, categorias, subcategorias</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <ArtEditAllEditPrecio />
+        {categorias.length == 1 ? (
           <Box>
-            <TextField label={"Monto o Porcentaje"} />
-            <FormControl sx={{ width: "250px" }}>
-              <InputLabel sx={{ margin: "10px" }}>Tipo de valor</InputLabel>
-              <Select name="Tipo">
-                <MenuItem value={"monto"}>$ - Monto</MenuItem>
-                <MenuItem value={"porcentaje"}>% - Porcentaje</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: "250px" }}>
-              <InputLabel sx={{ margin: "10px" }}>Accion</InputLabel>
-              <Select name="Tipo">
-                <MenuItem value={"sumar"}>Aumentar</MenuItem>
-                <MenuItem value={"restar"}>Disminuir</MenuItem>
-              </Select>
-            </FormControl>
+            <ArtEditAllEditCat categorias={categorias} />
+            <ArtEditAllEditSubcat subCategorias={subCategorias} />
           </Box>
-        </Box>
-        <Box>
-          <Typography>Editar Nombre Categoria</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              columnGap: "10px",
-              gridTemplateColumns: "200px 250px",
-            }}
-          >
-            <Typography
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              Categoria:
-            </Typography>
-            <TextField />
-          </Box>
-        </Box>
-        <Box>
-          <Typography>Editar Nombre SubCategoria</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              columnGap: "10px",
-              gridTemplateColumns: "200px 250px",
-            }}
-          >
-            <Typography
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              SubCategoria:
-            </Typography>
-            <TextField />
-          </Box>
-        </Box>
-        <Box>
-          <Button>Aplicar Cambios</Button>
-          <Button>Cancelar</Button>
-        </Box>
-      </Accordion>
-    </Paper>
+        ) : (
+          ""
+        )}
+      </AccordionDetails>
+      <AccordionActions>
+        <Button>Aplicar Cambios</Button>
+        <Button>Cancelar</Button>
+      </AccordionActions>
+    </Accordion>
   );
 };

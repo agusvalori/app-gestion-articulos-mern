@@ -1,8 +1,7 @@
 import {
   Button,
   InputLabel,
-  MenuItem,
-  Paper,
+  MenuItem,  
   Typography,
   FormControl,
   Select,
@@ -13,6 +12,7 @@ import {
   AccordionActions,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export const ArtEditAllSelect = ({
   articulos,
@@ -98,68 +98,66 @@ export const ArtEditAllSelect = ({
   }, [open]);
 
   return (
-    <Paper>
-      <Accordion>
-        <AccordionSummary>
-          <Typography>Filtrar articulos</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box sx={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
-            <Box sx={{ display: "grid", rowGap: "10px" }}>
-              <Typography>Filtrado</Typography>
-              <Box>
-                <FormControl sx={{ width: "250px" }}>
-                  <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
-                  <Select
-                    name="CATEGORIA"
-                    value={valuesSelect?.CATEGORIA}
-                    onChange={handleChangeSelect}
-                  >
-                    <MenuItem value={"Todos"}>Todos</MenuItem>
-                    {categorias?.map(
-                      (item) =>
-                        item != undefined && (
-                          <MenuItem key={item} value={item}>
-                            {item}
-                          </MenuItem>
-                        )
-                    )}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box>
-                <FormControl
-                  disabled={valuesSelect?.CATEGORIA === "Todos"}
-                  sx={{ width: "250px" }}
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>Filtrar articulos</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box sx={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
+          <Box sx={{ display: "grid", rowGap: "10px" }}>
+            <Typography>Filtrado</Typography>
+            <Box>
+              <FormControl sx={{ width: "250px" }}>
+                <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
+                <Select
+                  name="CATEGORIA"
+                  value={valuesSelect?.CATEGORIA}
+                  onChange={handleChangeSelect}
                 >
-                  <InputLabel sx={{ margin: "10px" }}>Subcategoria</InputLabel>
-                  <Select
-                    name="SUB_CATEGORIA"
-                    value={valuesSelect.SUB_CATEGORIA}
-                    onChange={handleChangeSelect}
-                  >
-                    <MenuItem value={"Todos"}>Todos</MenuItem>
-                    {subCategorias?.map(
-                      (item) =>
-                        item != undefined && (
-                          <MenuItem key={item} value={item}>
-                            {item}
-                          </MenuItem>
-                        )
-                    )}
-                  </Select>
-                </FormControl>
-              </Box>
+                  <MenuItem value={"Todos"}>Todos</MenuItem>
+                  {categorias?.map(
+                    (item) =>
+                      item != undefined && (
+                        <MenuItem key={item} value={item}>
+                          {item}
+                        </MenuItem>
+                      )
+                  )}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box>
+              <FormControl
+                disabled={valuesSelect?.CATEGORIA === "Todos"}
+                sx={{ width: "250px" }}
+              >
+                <InputLabel sx={{ margin: "10px" }}>Subcategoria</InputLabel>
+                <Select
+                  name="SUB_CATEGORIA"
+                  value={valuesSelect.SUB_CATEGORIA}
+                  onChange={handleChangeSelect}
+                >
+                  <MenuItem value={"Todos"}>Todos</MenuItem>
+                  {subCategorias?.map(
+                    (item) =>
+                      item != undefined && (
+                        <MenuItem key={item} value={item}>
+                          {item}
+                        </MenuItem>
+                      )
+                  )}
+                </Select>
+              </FormControl>
             </Box>
           </Box>
-        </AccordionDetails>
-        <AccordionActions>
-          <Box>
-            <Button>Limpiar</Button>
-            <Button onClick={filtrarArticulos}>Filtrar</Button>
-          </Box>
-        </AccordionActions>
-      </Accordion>
-    </Paper>
+        </Box>
+      </AccordionDetails>
+      <AccordionActions>
+        <Box>
+          <Button>Limpiar</Button>
+          <Button onClick={filtrarArticulos}>Filtrar</Button>
+        </Box>
+      </AccordionActions>
+    </Accordion>
   );
 };
