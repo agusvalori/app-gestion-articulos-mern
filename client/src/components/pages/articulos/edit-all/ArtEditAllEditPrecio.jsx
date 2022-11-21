@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Typography,
   TextField,
@@ -5,31 +6,159 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  AccordionActions,
   Box,
 } from "@mui/material";
-import React from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export const ArtEditAllEditPrecio = () => {
+export const ArtEditAllEditPrecio = ({
+  articulosFiltrados,
+  setArticulosFiltrados,
+  articulosAux,
+  setArticulosAux,
+}) => {
+  const initialValues = { value: 0, tipo: "monto", operacion: "aumentar" };
+  const [values, setValues] = useState(initialValues);
+  const [action, setAction] = useState("mostrar");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleBtnAbort = () => {
+    if (articulosAux) {
+      setArticulosFiltrados(articulosAux);
+      setArticulosAux(false);
+      setAction("mostrar");
+    } else {
+      console.log("articulosAux no existe");
+    }
+  };
+
+  const handleBtnShowChange = () => {
+    if (values.tipo === "monto") {
+      if (values.operacion === "aumentar") {
+        setArticulosFiltrados(
+          articulosFiltrados.map((articulo) => {
+            articulo.PRECIO = articulo.PRECIO + Number(values.value);
+            return articulo;
+          })
+        );
+      }
+      if (values.operacion === "disminuir") {
+        setArticulosFiltrados(
+          articulosFiltrados.map((articulo) => {
+            articulo.PRECIO = articulo.PRECIO - Number(values.value);
+            return articulo;
+          })
+        );
+      }
+    }
+
+    if (values.tipo === "porcentaje") {
+      if (values.operacion === "aumentar") {
+        setArticulosFiltrados(
+          articulosFiltrados.map((articulo) => {
+            articulo.PRECIO =
+              articulo.PRECIO + (articulo.PRECIO * Number(values.value)) / 100;
+            return articulo;
+          })
+        );
+      }
+      if (values.operacion === "disminuir") {
+        setArticulosFiltrados(
+          articulosFiltrados.map((articulo) => {
+            articulo.PRECIO =
+              articulo.PRECIO - (articulo.PRECIO * Number(values.value)) / 100;
+            return articulo;
+          })
+        );
+      }
+    }
+    setAction("aplicar");
+  };
+
   return (
-    <Box>
-      <Typography>Editar precio</Typography>
-      <Box>
-        <TextField label={"Monto o Porcentaje"} />
-        <FormControl sx={{ width: "250px" }}>
-          <InputLabel sx={{ margin: "10px" }}>Tipo de valor</InputLabel>
-          <Select name="Tipo">
-            <MenuItem value={"monto"}>$ - Monto</MenuItem>
-            <MenuItem value={"porcentaje"}>% - Porcentaje</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ width: "250px" }}>
-          <InputLabel sx={{ margin: "10px" }}>Accion</InputLabel>
-          <Select name="Tipo">
-            <MenuItem value={"sumar"}>Aumentar</MenuItem>
-            <MenuItem value={"restar"}>Disminuir</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-    </Box>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>Editar precio</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "30% 30% 30%",
+            columnGap: "3%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TextField
+            name={"value"}
+            label="Valor"
+            disabled={action !== "mostrar"}
+            value={values.value}
+            onChange={handleChange}
+          />
+          <FormControl disabled={action !== "mostrar"}>
+            <InputLabel sx={{ margin: "10px" }}>Tipo de valor</InputLabel>
+            <Select name="tipo" value={values.tipo} onChange={handleChange}>
+              <MenuItem value={"monto"}>$ - Monto</MenuItem>
+              <MenuItem value={"porcentaje"}>% - Porcentaje</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl disabled={action !== "mostrar"}>
+            <InputLabel sx={{ margin: "10px" }}>Accion</InputLabel>
+            <Select
+              name="operacion"
+              value={values.operacion}
+              onChange={handleChange}
+            >
+              <MenuItem value={"aumentar"}>Aumentar</MenuItem>
+              <MenuItem value={"disminuir"}>Disminuir</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </AccordionDetails>
+      <AccordionActions
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "30% 30%",
+          columnGap: "3%",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {console.log(action)}
+        {action === "mostrar" ? (
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => handleBtnShowChange()}
+          >
+            Mostrar Cambios
+          </Button>
+        ) : (
+          <Button variant="contained" color="success">
+            Aplicar Cambios
+          </Button>
+        )}
+
+        <Button
+          disabled={!Array.isArray(articulosAux)}
+          variant="contained"
+          color="warning"
+          onClick={() => handleBtnAbort()}
+        >
+          Cancelar
+        </Button>
+      </AccordionActions>
+    </Accordion>
   );
 };

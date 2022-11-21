@@ -17,6 +17,18 @@ const articleSchema = new mongoose.Schema({
   ],
   PRECIO: { type: Number, require: true },
   STOCK: { type: Number },
+  PROVEEDOR: {
+    proveedorId: Number,
+    articuloId: Number,
+  },
+  createdAt: {
+    userId: Number,
+    date: Date,
+  },
+  updatedAt: {
+    userId: Number,
+    date: Date,
+  },
 });
 
 export default mongoose.model("article", articleSchema);

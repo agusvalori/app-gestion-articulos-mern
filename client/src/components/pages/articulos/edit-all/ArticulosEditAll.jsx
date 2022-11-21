@@ -1,31 +1,31 @@
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Paper,
-  Select,
-  Typography,
-} from "@mui/material";
+import { IconButton, Modal, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { ArticuloTableVir } from "../table-virtualized/ArticuloTableVir";
-import { ArtEditAllSelect } from "./ArtEditAllSelect";
-import { ArtEditAllEdit } from "./ArtEditAllEdit";
+import { ArticulosEditAllSelect } from "./ArticulosEditAllSelect";
+import { ArticulosEditAllEdit } from "./ArticulosEditAllEdit";
+import { useEffect } from "react";
 
-export const ArticulosEditAll = ({ articulos }) => {
-  const [open, setOpen] = useState(false);
 
+export const ArticulosEditAll = ({ articulos }) => {  
+  const [open, setOpen] = useState(false);  
   const [articulosFiltrados, setArticulosFiltrados] = useState(
     articulos ? articulos : []
   );
+  const [articulosAux, setArticulosAux] = useState(false)
+  const [categoriasSelect, setCategoriasSelect] = useState([]);
+  const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {    
+    setArticulosAux(articulosFiltrados)
+    console.log("cambiando valor de articulosAux", articulosAux)
+  }, [categoriasSelect,subCategoriasSelect])
+  
 
   return (
     <Box>
@@ -46,13 +46,21 @@ export const ArticulosEditAll = ({ articulos }) => {
             },
           }}
         >
-          <ArtEditAllSelect
+          <ArticulosEditAllSelect
             articulos={articulos}
-            articulosFiltrados={articulosFiltrados}
             setArticulosFiltrados={setArticulosFiltrados}
+            categoriasSelect={categoriasSelect}
+            setCategoriasSelect={setCategoriasSelect}
+            subCategoriasSelect={subCategoriasSelect}
+            setSubCategoriasSelect={setSubCategoriasSelect}            
           />
 
-          <ArtEditAllEdit articulosFiltrados={articulosFiltrados} />
+          <ArticulosEditAllEdit
+            articulosFiltrados={articulosFiltrados}
+            setArticulosFiltrados={setArticulosFiltrados}  
+            articulosAux={articulosAux}          
+            setArticulosAux={setArticulosAux}
+          />
 
           <ArticuloTableVir articulos={articulosFiltrados} />
         </Paper>
