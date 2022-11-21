@@ -7,26 +7,22 @@ import { ArticulosEditAllSelect } from "./ArticulosEditAllSelect";
 import { ArticulosEditAllEdit } from "./ArticulosEditAllEdit";
 import { useEffect } from "react";
 
-
-export const ArticulosEditAll = ({ articulos }) => {  
-  const [open, setOpen] = useState(false);  
-  const [articulosFiltrados, setArticulosFiltrados] = useState(
-    articulos ? articulos : []
-  );
-  const [articulosAux, setArticulosAux] = useState(false)
+export const ArticulosEditAll = ({ articulos }) => {
+  const [open, setOpen] = useState(false);
+  const [articulosFiltrados, setArticulosFiltrados] = useState([]);
   const [categoriasSelect, setCategoriasSelect] = useState([]);
   const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
 
   const handleClose = () => {
+    setArticulosFiltrados(()=>articulos ? articulos : []);
     setOpen(false);
   };
 
-  useEffect(() => {    
-    setArticulosAux(articulosFiltrados)
-    console.log("cambiando valor de articulosAux", articulosAux)
-  }, [categoriasSelect,subCategoriasSelect])
+  useEffect(() => {
+    console.log("que mierda pasa")
+    setArticulosFiltrados(articulos ? articulos : []);
+  }, [open])
   
-
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
@@ -52,14 +48,13 @@ export const ArticulosEditAll = ({ articulos }) => {
             categoriasSelect={categoriasSelect}
             setCategoriasSelect={setCategoriasSelect}
             subCategoriasSelect={subCategoriasSelect}
-            setSubCategoriasSelect={setSubCategoriasSelect}            
+            setSubCategoriasSelect={setSubCategoriasSelect}
           />
 
           <ArticulosEditAllEdit
             articulosFiltrados={articulosFiltrados}
-            setArticulosFiltrados={setArticulosFiltrados}  
-            articulosAux={articulosAux}          
-            setArticulosAux={setArticulosAux}
+            setArticulosFiltrados={setArticulosFiltrados}
+            handleClose={handleClose}
           />
 
           <ArticuloTableVir articulos={articulosFiltrados} />

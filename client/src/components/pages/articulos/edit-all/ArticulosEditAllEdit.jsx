@@ -6,8 +6,7 @@ import { Box } from "@mui/material";
 export const ArticulosEditAllEdit = ({
   articulosFiltrados,
   setArticulosFiltrados,
-  articulosAux,
-  setArticulosAux
+  handleClose  
 }) => {
   const { editarArticulo } = useArticle();
 
@@ -16,7 +15,7 @@ export const ArticulosEditAllEdit = ({
       const result = await editarArticulo({
         ...articulo,
       });
-      console.log("handleEditAllSelect: ", index);
+      
     });
   };
 
@@ -25,8 +24,7 @@ export const ArticulosEditAllEdit = ({
       <ArtEditAllEditPrecio
         articulosFiltrados={articulosFiltrados}
         setArticulosFiltrados={setArticulosFiltrados}
-        articulosAux={articulosAux}
-        setArticulosAux={setArticulosAux}
+        handleClose={handleClose}
       />
     </Box>
   );

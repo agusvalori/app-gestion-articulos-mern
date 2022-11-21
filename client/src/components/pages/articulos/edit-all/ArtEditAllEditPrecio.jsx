@@ -15,15 +15,16 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+
 export const ArtEditAllEditPrecio = ({
   articulosFiltrados,
   setArticulosFiltrados,
-  articulosAux,
-  setArticulosAux,
+  handleClose,
 }) => {
   const initialValues = { value: 0, tipo: "monto", operacion: "aumentar" };
   const [values, setValues] = useState(initialValues);
   const [action, setAction] = useState("mostrar");
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -31,13 +32,7 @@ export const ArtEditAllEditPrecio = ({
   };
 
   const handleBtnAbort = () => {
-    if (articulosAux) {
-      setArticulosFiltrados(articulosAux);
-      setArticulosAux(false);
-      setAction("mostrar");
-    } else {
-      console.log("articulosAux no existe");
-    }
+    handleClose();
   };
 
   const handleBtnShowChange = () => {
@@ -135,7 +130,6 @@ export const ArtEditAllEditPrecio = ({
           justifyContent: "center",
         }}
       >
-        {console.log(action)}
         {action === "mostrar" ? (
           <Button
             variant="contained"
@@ -151,7 +145,6 @@ export const ArtEditAllEditPrecio = ({
         )}
 
         <Button
-          disabled={!Array.isArray(articulosAux)}
           variant="contained"
           color="warning"
           onClick={() => handleBtnAbort()}
