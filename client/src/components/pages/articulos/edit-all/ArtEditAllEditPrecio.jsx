@@ -17,9 +17,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 
 export const ArtEditAllEditPrecio = ({
-  articulosFiltrados,
-  setArticulosFiltrados,
-  handleClose,
+  articulosFiltrados,  
+  handleClose,  
+  setArticulosAux,
 }) => {
   const initialValues = { value: 0, tipo: "monto", operacion: "aumentar" };
   const [values, setValues] = useState(initialValues);
@@ -38,7 +38,7 @@ export const ArtEditAllEditPrecio = ({
   const handleBtnShowChange = () => {
     if (values.tipo === "monto") {
       if (values.operacion === "aumentar") {
-        setArticulosFiltrados(
+        setArticulosAux(
           articulosFiltrados.map((articulo) => {
             articulo.PRECIO = articulo.PRECIO + Number(values.value);
             return articulo;
@@ -46,7 +46,7 @@ export const ArtEditAllEditPrecio = ({
         );
       }
       if (values.operacion === "disminuir") {
-        setArticulosFiltrados(
+        setArticulosAux(
           articulosFiltrados.map((articulo) => {
             articulo.PRECIO = articulo.PRECIO - Number(values.value);
             return articulo;
@@ -57,7 +57,7 @@ export const ArtEditAllEditPrecio = ({
 
     if (values.tipo === "porcentaje") {
       if (values.operacion === "aumentar") {
-        setArticulosFiltrados(
+        setArticulosAux(
           articulosFiltrados.map((articulo) => {
             articulo.PRECIO =
               articulo.PRECIO + (articulo.PRECIO * Number(values.value)) / 100;
@@ -66,7 +66,7 @@ export const ArtEditAllEditPrecio = ({
         );
       }
       if (values.operacion === "disminuir") {
-        setArticulosFiltrados(
+        setArticulosAux(
           articulosFiltrados.map((articulo) => {
             articulo.PRECIO =
               articulo.PRECIO - (articulo.PRECIO * Number(values.value)) / 100;

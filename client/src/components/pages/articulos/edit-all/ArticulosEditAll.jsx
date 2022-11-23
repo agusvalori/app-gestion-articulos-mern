@@ -9,19 +9,20 @@ import { useEffect } from "react";
 
 export const ArticulosEditAll = ({ articulos }) => {
   const [open, setOpen] = useState(false);
-  const [articulosFiltrados, setArticulosFiltrados] = useState([]);
+  const [articulosFiltrados, setArticulosFiltrados] = useState(articulos ? articulos : []);
+  const [articulosAux, setArticulosAux] = useState(false)
   const [categoriasSelect, setCategoriasSelect] = useState([]);
   const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
 
   const handleClose = () => {
-    setArticulosFiltrados(()=>articulos ? articulos : []);
-    setOpen(false);
+    setArticulosAux(false)    
   };
 
   useEffect(() => {
-    console.log("que mierda pasa")
-    setArticulosFiltrados(articulos ? articulos : []);
-  }, [open])
+    console.log(articulosAux)
+  }, [articulosAux])
+  
+
   
   return (
     <Box>
@@ -52,12 +53,13 @@ export const ArticulosEditAll = ({ articulos }) => {
           />
 
           <ArticulosEditAllEdit
-            articulosFiltrados={articulosFiltrados}
-            setArticulosFiltrados={setArticulosFiltrados}
+            articulosFiltrados={articulosFiltrados}            
             handleClose={handleClose}
+            articulosAux={articulosAux}
+            setArticulosAux={setArticulosAux}
           />
 
-          <ArticuloTableVir articulos={articulosFiltrados} />
+          <ArticuloTableVir articulos={ articulosAux!=false? articulosAux: articulosFiltrados} />
         </Paper>
       </Modal>
     </Box>
