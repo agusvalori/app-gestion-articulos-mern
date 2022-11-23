@@ -63,7 +63,7 @@ const ArticuloContextProvider = (props) => {
     }
   };
 
-  const editarArticulo = async (articulo) => {
+  const editarArticulo = async (articulo) => {    
     try {
       const result = await axios.put(
         "http://localhost:4000/article/" + articulo.ID,
@@ -74,6 +74,7 @@ const ArticuloContextProvider = (props) => {
           },
         }
       );
+      await obtenerArticulos();
       return result.data;
     } catch (error) {
       return { status: false, message: error.message, value: error };

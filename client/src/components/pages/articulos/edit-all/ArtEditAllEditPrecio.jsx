@@ -15,16 +15,15 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-
 export const ArtEditAllEditPrecio = ({
-  articulosFiltrados,  
-  handleClose,  
+  articulosFiltrados,
+  articulosAux,
   setArticulosAux,
+  handleEditAllSelect,
 }) => {
   const initialValues = { value: 0, tipo: "monto", operacion: "aumentar" };
   const [values, setValues] = useState(initialValues);
   const [action, setAction] = useState("mostrar");
-  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -32,47 +31,61 @@ export const ArtEditAllEditPrecio = ({
   };
 
   const handleBtnAbort = () => {
-    handleClose();
+    setArticulosAux([]);
+    setAction("mostrar");
   };
 
-  const handleBtnShowChange = () => {
+  const handledBtnApplyChange = () => {    
+    handleEditAllSelect();
+  };
+
+  const handleBtnShowChange = () => {    
     if (values.tipo === "monto") {
       if (values.operacion === "aumentar") {
-        setArticulosAux(
-          articulosFiltrados.map((articulo) => {
-            articulo.PRECIO = articulo.PRECIO + Number(values.value);
-            return articulo;
-          })
-        );
+        articulosFiltrados.forEach((articulo) => {
+          setArticulosAux((aux) => [
+            ...aux,
+            { ...articulo, PRECIO: articulo.PRECIO + Number(values.value) },
+          ]);
+        });
       }
+
       if (values.operacion === "disminuir") {
-        setArticulosAux(
-          articulosFiltrados.map((articulo) => {
-            articulo.PRECIO = articulo.PRECIO - Number(values.value);
-            return articulo;
-          })
-        );
+        articulosFiltrados.forEach((articulo) => {
+          setArticulosAux((aux) => [
+            ...aux,
+            { ...articulo, PRECIO: articulo.PRECIO - Number(values.value) },
+          ]);
+        });
       }
     }
 
     if (values.tipo === "porcentaje") {
       if (values.operacion === "aumentar") {
-        setArticulosAux(
-          articulosFiltrados.map((articulo) => {
-            articulo.PRECIO =
-              articulo.PRECIO + (articulo.PRECIO * Number(values.value)) / 100;
-            return articulo;
-          })
-        );
+        articulosFiltrados.forEach((articulo) => {
+          setArticulosAux((aux) => [
+            ...aux,
+            {
+              ...articulo,
+              PRECIO:
+                articulo.PRECIO +
+                (articulo.PRECIO * Number(values.value)) / 100,
+            },
+          ]);
+        });
       }
       if (values.operacion === "disminuir") {
-        setArticulosAux(
-          articulosFiltrados.map((articulo) => {
-            articulo.PRECIO =
-              articulo.PRECIO - (articulo.PRECIO * Number(values.value)) / 100;
-            return articulo;
-          })
-        );
+        articulosFiltrados.forEach((articulo) => {
+          setArticulosAux((aux) => [
+            ...aux,
+            {
+              ...articulo,
+              PRECIO:
+                articulo.PRECIO -
+                (articulo.PRECIO * Number(values.value)) / 100,
+            },
+          ]);
+        });
       }
     }
     setAction("aplicar");
@@ -139,7 +152,7 @@ export const ArtEditAllEditPrecio = ({
             Mostrar Cambios
           </Button>
         ) : (
-          <Button variant="contained" color="success">
+          <Button onClick={handledBtnApplyChange} variant="contained" color="success">
             Aplicar Cambios
           </Button>
         )}

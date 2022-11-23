@@ -9,21 +9,18 @@ import { useEffect } from "react";
 
 export const ArticulosEditAll = ({ articulos }) => {
   const [open, setOpen] = useState(false);
-  const [articulosFiltrados, setArticulosFiltrados] = useState(articulos ? articulos : []);
-  const [articulosAux, setArticulosAux] = useState(false)
+  const [articulosFiltrados, setArticulosFiltrados] = useState(
+    articulos ? articulos : []
+  );
+  const [articulosAux, setArticulosAux] = useState([]);
+
   const [categoriasSelect, setCategoriasSelect] = useState([]);
   const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
 
   const handleClose = () => {
-    setArticulosAux(false)    
+    setOpen(false);
+    setArticulosFiltrados([]);
   };
-
-  useEffect(() => {
-    console.log(articulosAux)
-  }, [articulosAux])
-  
-
-  
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
@@ -53,13 +50,16 @@ export const ArticulosEditAll = ({ articulos }) => {
           />
 
           <ArticulosEditAllEdit
-            articulosFiltrados={articulosFiltrados}            
-            handleClose={handleClose}
+            articulosFiltrados={articulosFiltrados}
             articulosAux={articulosAux}
             setArticulosAux={setArticulosAux}
           />
 
-          <ArticuloTableVir articulos={ articulosAux!=false? articulosAux: articulosFiltrados} />
+          <ArticuloTableVir
+            articulos={
+              articulosAux.length != 0 ? articulosAux : articulosFiltrados
+            }
+          />
         </Paper>
       </Modal>
     </Box>
