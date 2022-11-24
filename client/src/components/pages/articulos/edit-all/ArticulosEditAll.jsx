@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ArticuloTableVir } from "../table-virtualized/ArticuloTableVir";
 import { ArticulosEditAllSelect } from "./ArticulosEditAllSelect";
 import { ArticulosEditAllEdit } from "./ArticulosEditAllEdit";
-import { useEffect } from "react";
 
 export const ArticulosEditAll = ({ articulos }) => {
   const [open, setOpen] = useState(false);
@@ -13,14 +12,19 @@ export const ArticulosEditAll = ({ articulos }) => {
     articulos ? articulos : []
   );
   const [articulosAux, setArticulosAux] = useState([]);
-
-  const [categoriasSelect, setCategoriasSelect] = useState([]);
-  const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
+  const initialValuesSelect = {
+    CATEGORIA: "Todos",
+    SUB_CATEGORIA: "Todos",
+  };
+  const [valuesSelect, setValuesSelect] = useState(initialValuesSelect);
 
   const handleClose = () => {
     setOpen(false);
-    setArticulosFiltrados([]);
+    setArticulosFiltrados(articulos ? articulos : []);
+    setArticulosAux([]);
+    setValuesSelect(initialValuesSelect)
   };
+
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
@@ -43,16 +47,16 @@ export const ArticulosEditAll = ({ articulos }) => {
           <ArticulosEditAllSelect
             articulos={articulos}
             setArticulosFiltrados={setArticulosFiltrados}
-            categoriasSelect={categoriasSelect}
-            setCategoriasSelect={setCategoriasSelect}
-            subCategoriasSelect={subCategoriasSelect}
-            setSubCategoriasSelect={setSubCategoriasSelect}
+            valuesSelect={valuesSelect}
+            setValuesSelect={setValuesSelect}
           />
 
           <ArticulosEditAllEdit
             articulosFiltrados={articulosFiltrados}
             articulosAux={articulosAux}
             setArticulosAux={setArticulosAux}
+            valuesSelect={valuesSelect}
+            handleClose={handleClose}
           />
 
           <ArticuloTableVir

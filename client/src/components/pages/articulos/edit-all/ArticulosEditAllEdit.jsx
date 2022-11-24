@@ -1,55 +1,138 @@
-import React, { useState } from "react";
-import { ArtEditAllEditPrecio } from "./ArtEditAllEditPrecio";
+import React, { useState, useSyncExternalStore } from "react";
+
 import { useArticle } from "../../../../context/ArticleContext";
-import { Box } from "@mui/material";
-import { useEffect } from "react";
+import { ArticulosEditAllEditPrecio } from "./ArticulosEditAllEditPrecio";
+import { ArticulosEditAllEditAction } from "./ArticulosEditAllEditAction";
+import { Box, Paper, Typography } from "@mui/material";
+import { ArticulosEditAllEditCat } from "./ArticulosEditAllEditCat";
+import { ArticulosEditAllEditSubcat } from "./ArticulosEditAllEditSubcat";
 
 export const ArticulosEditAllEdit = ({
   articulosFiltrados,
   articulosAux,
   setArticulosAux,
+  valuesSelect,
+  handleClose,
 }) => {
   const { editarArticulo } = useArticle();
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("mostrar");
+  const initialValues = {
+    priceValue: 0,
+    priceTipo: "monto",
+    priceOperacion: "aumentar",
+    subCategoriaNueva: "",
+    categoriaNueva: "",
+  };
+  const [values, setValues] = useState(initialValues);
 
-  const handleEditAllSelect = async () => {
-    let count = 0;
-    articulosAux.forEach(async (articulo, index) => {
-      const result = await editarArticulo({
-        ...articulo,
-      });
-      if (result.status) {
-        count += 1;
-      }
-      setLoading(
-        "Editando articulo " +
-          index +
-          " de " +
-          articulosAux?.length +
-          " - Estado: " +
-          result?.status +
-          " - Count: " +
-          count
-      );
+  const handleShowChange = () => {
+    setArticulosAux([]);
+
+    articulosFiltrados.forEach((articulo) => {
+      setArticulosAux((aux) => [
+        ...aux,
+        {
+          ...articulo,
+          PRECIO: handleShowChangePrice(articulo),
+          CATEGORIA: handleShowChangeCat(articulo),
+          SUB_CATEGORIA: handleShowChangeSubCat(articulo),
+        },
+      ]);
     });
+
+    handleShowChangePrice();
+    handleShowChangeCat();
+    handleShowChangeSubCat();
+    setStatus("aplicar");
   };
 
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]);
+  const handleShowChangePrice = (articulo) => {
+    const { priceTipo, priceOperacion } = values;
+    if (articulo) {
+      if (priceTipo === "monto" && priceOperacion === "aumentar") {
+        return articulo.PRECIO + Number(values.priceValue);
+      }
+
+      if (priceTipo === "monto" && priceOperacion === "disminuir") {
+        return articulo.PRECIO - Number(values.priceValue);
+      }
+
+      if (priceTipo === "porcentaje" && priceOperacion === "aumentar") {
+        return (
+          articulo.PRECIO + (articulo.PRECIO * Number(values.priceValue)) / 100
+        );
+      }
+
+      if (priceTipo === "porcentaje" && priceOperacion === "disminuir") {
+        return (
+          articulo.PRECIO - (articulo.PRECIO * Number(values.priceValue)) / 100
+        );
+      }
+    }
+  };
+
+  const handleShowChangeCat = (articulo) => {
+    if (articulo) {
+      return articulo.CATEGORIA;
+    }
+  };
+
+  const handleShowChangeSubCat = (articulo) => {
+    if (articulo) {
+      return articulo.SUB_CATEGORIA;
+    }
+  };
+
+  const handleApplyChange = async () => {
+    console.log("handleApplyChange");
+    /*
+    setLoading(true);
+    articulosAux.forEach(async (articulo, index) => {
+      await editarArticulo({
+        ...articulo,
+      });
+      setLoading(index === articulosAux.length - 1);
+    });
+    */
+  };
+
+  const handleAbortChange = () => {
+    setArticulosAux([]);
+    setStatus("mostrar");
+  };
 
   return (
-    <Box>
-      <Box>
-        loading
-        {loading}
+    <Paper sx={{ padding: "5px" }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Typography>Editar articulos Filtrados</Typography>
       </Box>
-      <ArtEditAllEditPrecio
-        articulosFiltrados={articulosFiltrados}
-        setArticulosAux={setArticulosAux}
-        articulosAux={articulosAux}
-        handleEditAllSelect={handleEditAllSelect}
-      />
-    </Box>
+      <Box>
+        <ArticulosEditAllEditPrecio
+          status={status}
+          values={values}
+          setValues={setValues}
+        />
+        <ArticulosEditAllEditCat
+          values={values}
+          setValues={setValues}
+          categoriasSelect={valuesSelect.CATEGORIA}
+        />
+        <ArticulosEditAllEditSubcat
+          values={values}
+          setValues={setValues}
+          subCategoriasSelect={valuesSelect.SUB_CATEGORIA}
+        />
+      </Box>
+
+      <Box sx={{ margin: "10px 0px" }}>
+        <ArticulosEditAllEditAction
+          status={status}
+          handleShowChange={handleShowChange}
+          handleApplyChange={handleApplyChange}
+          handleAbortChange={handleAbortChange}
+          handleClose={handleClose}
+        />
+      </Box>
+    </Paper>
   );
 };

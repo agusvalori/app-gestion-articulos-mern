@@ -13,18 +13,16 @@ import React, { useEffect, useState } from "react";
 export const ArticulosEditAllSelect = ({
   articulos,
   setArticulosFiltrados,
-
-  valuesSelect,
-  setValuesSelect,
+  categoriasSelect,
+  setCategoriasSelect,
+  subCategoriasSelect,
+  setSubCategoriasSelect,
 }) => {
   const initialValuesSelect = {
     CATEGORIA: "Todos",
     SUB_CATEGORIA: "Todos",
   };
-  
-
-  const [categoriasSelect, setCategoriasSelect] = useState([]);
-  const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
+  const [valuesSelect, setValuesSelect] = useState(initialValuesSelect);
 
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
@@ -57,10 +55,10 @@ export const ArticulosEditAllSelect = ({
     }
   };
 
-  const handleClean = () => {
+  const handleClean = ()=>{
     setArticulosFiltrados(articulos);
-    setValuesSelect(initialValuesSelect);
-  };
+      setValuesSelect(initialValuesSelect);
+  }
 
   useEffect(() => {
     if (valuesSelect.CATEGORIA != "Todos") {
@@ -99,15 +97,8 @@ export const ArticulosEditAllSelect = ({
   }, [open]);
 
   return (
-    <Paper sx={{ padding: "5px" }}>
-      <Box
-        sx={{
-          display: "grid",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "50px",
-        }}
-      >
+    <Paper sx={{padding:'5px'}}>
+      <Box sx={{ display: "grid", justifyContent: "center", alignItems:'center', height:'50px' }}>
         <Typography>Filtrar Articulos</Typography>
       </Box>
       <Box
@@ -116,7 +107,7 @@ export const ArticulosEditAllSelect = ({
           gridTemplateColumns: "30% 30% 30%",
           columnGap: "3%",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent:'center'          
         }}
       >
         <FormControl sx={{ width: "250px" }}>
@@ -160,14 +151,8 @@ export const ArticulosEditAllSelect = ({
           </Select>
         </FormControl>
 
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            variant="contained"
-            sx={{ width: "80%" }}
-            onClick={handleClean}
-          >
-            Limpiar
-          </Button>
+        <Box sx={{display:'flex', justifyContent:'center'}}>
+          <Button variant="contained" sx={{width:'80%'}} onClick={handleClean}  >Limpiar</Button>
         </Box>
       </Box>
     </Paper>
