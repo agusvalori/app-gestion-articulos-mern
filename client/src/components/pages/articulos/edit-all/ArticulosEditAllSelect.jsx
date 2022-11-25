@@ -13,7 +13,6 @@ import React, { useEffect, useState } from "react";
 export const ArticulosEditAllSelect = ({
   articulos,
   setArticulosFiltrados,
-
   valuesSelect,
   setValuesSelect,
 }) => {

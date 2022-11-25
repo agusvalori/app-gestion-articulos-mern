@@ -21,7 +21,7 @@ export const ArticulosEditAllEditCat = ({ categoriasSelect }) => {
         justifyContent: "center",
       }}
     >
-      <Box sx={{textAlign:'center', border:'1px solid', borderRadius:'5px', padding:'5px'}} >
+      <Box sx={{textAlign:'center', border:'1px solid', borderRadius:'5px', padding:'5px', backgroundColor:"#eceff1"}} >
         <Typography fontSize={10} >Categoria Actual</Typography>
         <Typography sx={{color:'#3f51b5'}}>{categoriasSelect}</Typography>
       </Box>

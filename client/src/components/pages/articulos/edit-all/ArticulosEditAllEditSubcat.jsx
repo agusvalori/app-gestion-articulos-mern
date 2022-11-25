@@ -18,6 +18,7 @@ export const ArticulosEditAllEditSubcat = ({ subCategoriasSelect }) => {
           border: "1px solid",
           borderRadius: "5px",
           padding: "5px",
+          backgroundColor:"#eceff1"
         }}
       >
         <Typography fontSize={10}>Subcategoria Actual</Typography>
