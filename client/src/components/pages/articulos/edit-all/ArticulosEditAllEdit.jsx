@@ -1,11 +1,10 @@
-import React, { useState, useSyncExternalStore } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useArticle } from "../../../../context/ArticleContext";
 import { ArticulosEditAllEditPrecio } from "./ArticulosEditAllEditPrecio";
 import { ArticulosEditAllEditAction } from "./ArticulosEditAllEditAction";
 import { Box, Paper, Typography } from "@mui/material";
-import { ArticulosEditAllEditCat } from "./ArticulosEditAllEditCat";
-import { ArticulosEditAllEditSubcat } from "./ArticulosEditAllEditSubcat";
+import { ArticulosEditAllEditCatYSubcat } from "./ArticulosEditAllEditCatYSubcat";
 
 export const ArticulosEditAllEdit = ({
   articulosFiltrados,
@@ -16,33 +15,41 @@ export const ArticulosEditAllEdit = ({
 }) => {
   const { editarArticulo } = useArticle();
   const [status, setStatus] = useState("mostrar");
+  /*
+  Estados validos
+  mostrar
+  aplicar
+  error
+  loading
+  */
   const initialValues = {
     priceValue: 0,
     priceTipo: "monto",
     priceOperacion: "aumentar",
-    subCategoriaNueva: "",
-    categoriaNueva: "",
+    subCategoriaNueva: valuesSelect.SUB_CATEGORIA,
+    categoriaNueva: valuesSelect.CATEGORIA,
   };
   const [values, setValues] = useState(initialValues);
 
   const handleShowChange = () => {
     setArticulosAux([]);
-
-    articulosFiltrados.forEach((articulo) => {
+    for (const articulo of articulosFiltrados) {
       setArticulosAux((aux) => [
         ...aux,
         {
           ...articulo,
           PRECIO: handleShowChangePrice(articulo),
-          CATEGORIA: handleShowChangeCat(articulo),
-          SUB_CATEGORIA: handleShowChangeSubCat(articulo),
+          CATEGORIA:
+            values?.categoriaNueva === "Todos"
+              ? articulo.CATEGORIA
+              : values?.categoriaNueva,
+          SUB_CATEGORIA:
+            values?.subCategoriaNueva === "Todos"
+              ? articulo.SUB_CATEGORIA
+              : values?.subCategoriaNueva,
         },
       ]);
-    });
-
-    handleShowChangePrice();
-    handleShowChangeCat();
-    handleShowChangeSubCat();
+    }
     setStatus("aplicar");
   };
 
@@ -71,35 +78,34 @@ export const ArticulosEditAllEdit = ({
     }
   };
 
-  const handleShowChangeCat = (articulo) => {
-    if (articulo) {
-      return articulo.CATEGORIA;
-    }
-  };
-
-  const handleShowChangeSubCat = (articulo) => {
-    if (articulo) {
-      return articulo.SUB_CATEGORIA;
-    }
-  };
-
   const handleApplyChange = async () => {
-    console.log("handleApplyChange");
-    /*
-    setLoading(true);
-    articulosAux.forEach(async (articulo, index) => {
-      await editarArticulo({
-        ...articulo,
-      });
-      setLoading(index === articulosAux.length - 1);
-    });
-    */
+    setStatus("loading");
+
+    for (const [index, articulo] of articulosAux.entries()) {
+      const result = await editarArticulo({ ...articulo });
+      console.log("Editando articulo: ",index," de ",articulosAux.length)
+      if (!result.status) {
+        setStatus("error");
+      }
+    }
+    setStatus("mostrar");
+    handleClose();
   };
 
   const handleAbortChange = () => {
     setArticulosAux([]);
     setStatus("mostrar");
   };
+
+  useEffect(() => {
+    setValues({
+      priceValue: 0,
+      priceTipo: "monto",
+      priceOperacion: "aumentar",
+      subCategoriaNueva: valuesSelect.SUB_CATEGORIA,
+      categoriaNueva: valuesSelect.CATEGORIA,
+    });
+  }, [valuesSelect]);
 
   return (
     <Paper sx={{ padding: "5px" }}>
@@ -112,14 +118,10 @@ export const ArticulosEditAllEdit = ({
           values={values}
           setValues={setValues}
         />
-        <ArticulosEditAllEditCat
+        <ArticulosEditAllEditCatYSubcat
           values={values}
           setValues={setValues}
           categoriasSelect={valuesSelect.CATEGORIA}
-        />
-        <ArticulosEditAllEditSubcat
-          values={values}
-          setValues={setValues}
           subCategoriasSelect={valuesSelect.SUB_CATEGORIA}
         />
       </Box>

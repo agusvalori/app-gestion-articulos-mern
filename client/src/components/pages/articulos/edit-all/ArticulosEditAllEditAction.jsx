@@ -17,7 +17,7 @@ export const ArticulosEditAllEditAction = ({ status, handleShowChange,handleAppl
         variant="contained"
         color={status==="mostrar"?"info":"success"}
       >
-        {status} Cambios
+        {status==="loading"?"loading":status} Cambios
       </Button>
 
       <Button
