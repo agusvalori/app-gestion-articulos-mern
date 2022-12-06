@@ -4,11 +4,7 @@ import { AppBar, Paper, Tab, Tabs, useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { HomePage } from "../pages/home/HomePage";
-import { CajaPage } from "../pages/caja/CajaPage";
-import { VentasPage } from "../pages/ventas/VentasPage";
 import { ArticulosPage } from "../pages/articulos/ArticulosPage";
-import { ClientesPage } from "../pages/clientes/ClientesPage";
-import { ProveedoresPage } from "../pages/proveedores/ProveedoresPage";
 import { NotFountPage } from "../pages/NotFountPage";
 
 export const TabPanelAdmin = () => {
@@ -20,16 +16,7 @@ export const TabPanelAdmin = () => {
       case 0:
         return <HomePage />;
       case 1:
-        return <CajaPage />;
-      case 2:
-        return <VentasPage />;
-      case 3:
         return <ArticulosPage />;
-      case 4:
-        return <ClientesPage />;
-      case 5:
-        return <ProveedoresPage />;
-
       default:
         return <NotFountPage />;
     }
@@ -51,11 +38,7 @@ export const TabPanelAdmin = () => {
           onChange={(event, valueSelect) => setValues(valueSelect)}
         >
           <Tab label="Inicio" />
-          <Tab label="Caja" />
-          <Tab label="Venta" />
           <Tab label="Articulos" />
-          <Tab label="Clientes" />
-          <Tab label="Proveedores" />
         </Tabs>
       </AppBar>
       <Paper

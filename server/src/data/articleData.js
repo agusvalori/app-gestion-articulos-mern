@@ -104,8 +104,7 @@ const obtenerArticuloXId = async (req, res) => {
   }
 };
 
-const editarArticulo = async (req, res) => {  
-  console.log("editarArticulo: ", req.params, req.body)
+const editarArticulo = async (req, res) => {    
   try {
     const { id } = req.params;
     let newArticle = new article(req.body);    
@@ -137,9 +136,8 @@ const editarArticulo = async (req, res) => {
         });
         await fs.unlink(image.tempFilePath);
       }
-    }
+    }    
 
-    console.log("preupdate");
     const update = await article.updateOne({ ID: id }, newArticle);
     if (imageUrl.length <= 4) {
       await article.updateOne({ ID: id }, { IMAGE_URL: imageUrl });
