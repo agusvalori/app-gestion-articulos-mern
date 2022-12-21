@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { AppBar, Tab, Tabs, useMediaQuery,Paper } from "@mui/material";
+import { AppBar, Tab, Tabs, useMediaQuery, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 import { HomePage } from "../pages/home/HomePage";
-import { CajaPage } from "../pages/caja/CajaPage";
-import { VentasPage } from "../pages/ventas/VentasPage";
 import { ArticulosPage } from "../pages/articulos/ArticulosPage";
-import { ClientesPage } from "../pages/clientes/ClientesPage";
 import { NotFountPage } from "../pages/NotFountPage";
 
 export const TabPanelSeller = () => {
@@ -17,13 +14,7 @@ export const TabPanelSeller = () => {
       case 0:
         return <HomePage />;
       case 1:
-        return <CajaPage />;
-      case 2:
-        return <VentasPage />;
-      case 3:
         return <ArticulosPage />;
-      case 4:
-        return <ClientesPage />;
       default:
         return <NotFountPage />;
     }
@@ -45,10 +36,7 @@ export const TabPanelSeller = () => {
           onChange={(event, valueSelect) => setValues(valueSelect)}
         >
           <Tab label="Inicio" />
-          <Tab label="Caja" />
-          <Tab label="Venta" />
-          <Tab label="Articulos" />
-          <Tab label="Clientes" />
+          <Tab label="Articulos" />        
         </Tabs>
       </AppBar>
       <Paper

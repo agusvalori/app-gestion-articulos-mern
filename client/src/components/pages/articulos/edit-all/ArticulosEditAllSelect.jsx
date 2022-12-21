@@ -20,7 +20,6 @@ export const ArticulosEditAllSelect = ({
     CATEGORIA: "Todos",
     SUB_CATEGORIA: "Todos",
   };
-  
 
   const [categoriasSelect, setCategoriasSelect] = useState([]);
   const [subCategoriasSelect, setSubCategoriasSelect] = useState([]);
@@ -101,10 +100,9 @@ export const ArticulosEditAllSelect = ({
     <Paper sx={{ padding: "5px" }}>
       <Box
         sx={{
-          display: "grid",
+          display: "Flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "50px",
         }}
       >
         <Typography>Filtrar Articulos</Typography>
@@ -118,9 +116,11 @@ export const ArticulosEditAllSelect = ({
           justifyContent: "center",
         }}
       >
-        <FormControl sx={{ width: "250px" }}>
-          <InputLabel sx={{ margin: "10px" }}>Categoria</InputLabel>
+        <FormControl>
+          <InputLabel>Categoria</InputLabel>
           <Select
+            size="small"
+            label="Categoria"
             name="CATEGORIA"
             value={valuesSelect?.CATEGORIA}
             onChange={handleChangeSelect}
@@ -137,12 +137,11 @@ export const ArticulosEditAllSelect = ({
           </Select>
         </FormControl>
 
-        <FormControl
-          disabled={valuesSelect?.CATEGORIA === "Todos"}
-          sx={{ width: "250px" }}
-        >
-          <InputLabel sx={{ margin: "10px" }}>Subcategoria</InputLabel>
+        <FormControl disabled={valuesSelect?.CATEGORIA === "Todos"}>
+          <InputLabel>Subcategoria</InputLabel>
           <Select
+            size="small"
+            label="Subcategoria"
             name="SUB_CATEGORIA"
             value={valuesSelect.SUB_CATEGORIA}
             onChange={handleChangeSelect}

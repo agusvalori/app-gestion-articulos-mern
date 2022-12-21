@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Button,
   CircularProgress,
+  Divider,
   IconButton,
   Modal,
   Paper,
@@ -58,9 +59,9 @@ export const ArticuloAddEdit = ({ articulo }) => {
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
         {articulo?.ID ? (
-          <EditIcon color="info" />
+          <EditIcon color="info"  />
         ) : (
-          <AddCircleIcon color="info" fontSize="large" />
+          <AddCircleIcon color="success"  fontSize="large" />
         )}
       </IconButton>
       <Modal
@@ -73,15 +74,19 @@ export const ArticuloAddEdit = ({ articulo }) => {
           sx={{ padding: "10px", width: { xs: "320px", sm: "400px" } }}
         >
           <Box>
-            <Typography align="center">
+            <Typography variant='h6' align="center" sx={{color:articulo?.ID ? "blue" : "green", fontWeight:'bold' }}>
               {articulo?.ID ? "Editar" : "Agregar"} Articulo
             </Typography>
           </Box>
+          
+          <Divider sx={{margin:'10px 0px'}}/>
+          
           <Box>
             <form onSubmit={(event) => handleSubmit(event)}>
               <Box sx={{ display: "grid", rowGap: "10px" }}>
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="ID"
                   label="ID"
                   value={values?.ID}
@@ -89,6 +94,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                 />
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="ARTICULO"
                   label="ARTICULO"
                   value={values?.ARTICULO}
@@ -96,6 +102,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                 />
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="CATEGORIA"
                   label="CATEGORIA"
                   value={values?.CATEGORIA}
@@ -104,6 +111,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
 
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="SUB_CATEGORIA"
                   label="SUBCATEGORIA"
                   onChange={(event) => handleChange(event)}
@@ -113,6 +121,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
 
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="PRECIO"
                   label="PRECIO"
                   onChange={(event) => handleChange(event)}
@@ -120,6 +129,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                 />
                 <TextField
                   sx={{ width: "100%" }}
+                  size='small'
                   name="STOCK"
                   label="STOCK"
                   value={values?.STOCK}
@@ -127,7 +137,7 @@ export const ArticuloAddEdit = ({ articulo }) => {
                 />
                 <ArticuloAddEditImage setValues={setValues} values={values} />
               </Box>
-
+              <Divider sx={{margin:'10px 0px'}}/>
               <Box
                 sx={{
                   display: "grid",
@@ -140,11 +150,11 @@ export const ArticuloAddEdit = ({ articulo }) => {
                     <CircularProgress size={32} />
                   </Box>
                 ) : (
-                  <Button type={"submit"} variant="outlined">
+                  <Button type={"submit"}  variant="contained" color={articulo?.ID ? "info" : "success"} >
                     {articulo?.ID ? "Editar" : "Agregar"}
                   </Button>
                 )}
-                <Button variant="outlined" onClick={() => handleClose()}>
+                <Button variant="contained" color='warning' onClick={() => handleClose()}>
                   Cancelar
                 </Button>
               </Box>

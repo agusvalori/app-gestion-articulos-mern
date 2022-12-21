@@ -33,7 +33,7 @@ export const ArticuloDelet = ({ articulo }) => {
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
-        <DeleteIcon />
+        <DeleteIcon color="error"  />
       </IconButton>
       <Modal
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

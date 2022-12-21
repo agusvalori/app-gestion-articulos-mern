@@ -21,7 +21,7 @@ export const ArticuloDeleteAll = ({ articulos }) => {
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
-        <DeleteIcon color="error" fontSize="large" />
+        <DeleteIcon color="error"  fontSize="large" />
       </IconButton>
       <Modal
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

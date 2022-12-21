@@ -28,7 +28,7 @@ export const ArticulosEditAll = ({ articulos }) => {
   return (
     <Box>
       <IconButton onClick={() => setOpen(!open)}>
-        <EditIcon color="info" fontSize="large" />
+        <EditIcon color="info"  fontSize="large" />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
         <Paper
