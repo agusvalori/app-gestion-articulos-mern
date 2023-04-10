@@ -1,9 +1,5 @@
 import article from "../entity/articleEntity.js";
-import {
-  deleteImageCloudinary,
-  uploadImageCloudinary,
-} from "../lib/cloudinary.js";
-import fs from "fs-extra";
+import { addArticleImage } from "./articleImageData.js";
 
 const agregarArticulo = async (req, res) => {
   const {
@@ -29,23 +25,7 @@ const agregarArticulo = async (req, res) => {
       STOCK,
     });
 
-    let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
-
-    if (image) {
-      if (Array.isArray(image)) {
-        for (let index = 0; index < image.length; index++) {
-          const result = await uploadImageCloudinary(
-            image[index]?.tempFilePath
-          );
-          newArticle.IMAGE_URL.push({ ...result, article_id: ID });
-          await fs.unlink(image[index]?.tempFilePath);
-        }
-      } else {
-        const result = await uploadImageCloudinary(image?.tempFilePath);
-        newArticle.IMAGE_URL.push({ ...result, article_id: ID });
-        await fs.unlink(image.tempFilePath);
-      }
-    }
+    newArticle.IMAGE_URL = addArticleImage(req.files);
 
     await newArticle.save();
 
@@ -63,7 +43,7 @@ const agregarArticulo = async (req, res) => {
 
 const obtenerArticulos = async (req, res) => {
   try {
-    const result = await article.find().sort({ID:1});
+    const result = await article.find().sort({ ID: 1 });
     if (result.length !== 0) {
       res
         .status(200)
@@ -104,14 +84,12 @@ const obtenerArticuloXId = async (req, res) => {
   }
 };
 
-const editarArticulo = async (req, res) => {    
+const editarArticulo = async (req, res) => {
   try {
     const { id } = req.params;
-    let newArticle = new article(req.body);    
+    let newArticle = new article(req.body);
 
-    let imageUrl = req?.body?.IMAGE_URL
-        ? JSON.parse(req?.body?.IMAGE_URL)
-        : [];
+    let imageUrl = req?.body?.IMAGE_URL ? JSON.parse(req?.body?.IMAGE_URL) : [];
 
     let image = req?.files ? req?.files[Object.keys(req.files)[0]] : false;
     if (image) {
@@ -136,7 +114,7 @@ const editarArticulo = async (req, res) => {
         });
         await fs.unlink(image.tempFilePath);
       }
-    }    
+    }
 
     const update = await article.updateOne({ ID: id }, newArticle);
     if (imageUrl.length <= 4) {
@@ -156,7 +134,7 @@ const editarArticulo = async (req, res) => {
         value: update,
       });
     }
-  } catch (error) {    
+  } catch (error) {
     res
       .status(500)
       .send({ status: false, message: error.message, value: error });
